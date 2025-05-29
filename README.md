@@ -1,54 +1,61 @@
-CinemaBooking - Hệ thống đặt vé xem phim
-CinemaBooking là một ứng dụng web cho phép người dùng đặt vé xem phim trực tuyến và quản lý hệ thống rạp chiếu phim. Ứng dụng hỗ trợ người dùng thông thường với các tính năng như đăng nhập, đăng ký, lọc phim/rạp, chọn ghế, mua vé, xem lịch sử giao dịch, và vai trò admin với quyền quản lý dữ liệu thông qua các chức năng CRUD. Đồ án được xây dựng bằng Spring Boot, cung cấp trải nghiệm mượt mà và hiệu quả.
-Tính năng chính
-Tính năng dành cho người dùng
+CinemaBooking - Online Movie Ticket Booking System
+CinemaBooking is a robust web application designed for seamless movie ticket booking and cinema management. Built with Spring Boot, it provides an intuitive experience for moviegoers and comprehensive administrative tools for cinema operators. The system supports user authentication, movie and theater filtering, seat selection, ticket purchasing with PayPal integration, and full CRUD operations for administrative tasks.
+Features
+User Features
 
-Đăng nhập/Đăng ký: Tạo tài khoản hoặc đăng nhập để sử dụng hệ thống.
-Cập nhật tài khoản: Chỉnh sửa thông tin cá nhân như tên, email, mật khẩu.
-Lọc rạp chiếu và phim: Tìm kiếm rạp chiếu và phim theo vị trí, thể loại, hoặc thời gian chiếu.
-Chọn ghế và mua vé: Giao diện trực quan để chọn ghế và hoàn tất thanh toán vé xem phim.
-Lịch sử mua vé: Xem danh sách vé đã mua, bao gồm thông tin phim, rạp, ghế, và thời gian.
-
-Tính năng dành cho admin
-
-Đăng nhập bằng tài khoản admin: Sử dụng tài khoản admin để truy cập giao diện quản trị.
-Quản lý CRUD:
-Users: Quản lý thông tin người dùng (tạo, xem, sửa, xóa).
-Theaters: Quản lý danh sách rạp chiếu phim (địa điểm, thông tin liên hệ).
-Screens: Quản lý các phòng chiếu trong rạp (số phòng, sức chứa).
-Seats: Quản lý ghế ngồi trong mỗi phòng chiếu (vị trí, trạng thái).
-Roles: Quản lý vai trò người dùng (admin, user, v.v.).
-Movies: Quản lý thông tin phim (tên, thời lượng, ngày phát hành).
-Genres: Quản lý thể loại phim (hành động, tình cảm, kinh dị, v.v.).
-Director: Quản lý thông tin đạo diễn.
-Brands: Quản lý các thương hiệu rạp chiếu (CGV, Lotte, v.v.).
-Actor: Quản lý thông tin diễn viên.
+Account Management:
+Sign Up / Sign In: Create a new account or log in securely to access the system.
+Profile Updates: Modify personal details such as name, email, and password.
 
 
+Movie and Theater Filtering: Search for movies and theaters by location, genre, or showtime.
+Seat Selection and Ticket Purchase: Interactive seat map for selecting seats and completing ticket transactions via PayPal for secure and convenient payments.
+Booking History: View a detailed history of purchased tickets, including movie details, theater, seat, showtime, and payment status.
 
-Công nghệ sử dụng
+Admin Features
 
-Back-end: Spring Boot, Spring Security (xác thực và phân quyền), Spring Data JPA.
-Front-end: Thymeleaf (hoặc React/Angular nếu bạn sử dụng), Bootstrap.
-Cơ sở dữ liệu: MySQL/PostgreSQL (hoặc H2 để phát triển).
-Công cụ: Maven, Git, IntelliJ IDEA.
+Admin Login: Secure access to the admin dashboard using dedicated admin credentials.
+CRUD Operations: Full Create, Read, Update, and Delete functionality for the following entities:
+Users: Manage user accounts (e.g., registration, role assignment).
+Theaters: Administer cinema locations, including details like address and brand.
+Screens: Manage screening rooms within theaters (e.g., room number, capacity).
+Seats: Configure seat layouts and statuses for each screen.
+Roles: Define and assign user roles (e.g., admin, user).
+Movies: Manage movie details (e.g., title, duration, release date).
+Genres: Categorize movies by genre (e.g., action, drama, horror).
+Directors: Maintain records of movie directors.
+Brands: Manage cinema chain brands (e.g., CGV, Lotte).
+Actors: Track actor information associated with movies.
 
-Yêu cầu hệ thống
 
-Java 17 hoặc cao hơn.
-Maven 3.6+.
-MySQL/PostgreSQL (tùy cấu hình).
-Trình duyệt web hiện đại (Chrome, Firefox, Edge).
 
-Hướng dẫn cài đặt
+Technology Stack
 
-Clone dự án:git clone https://github.com/phucnguyen22074/CinemaBooking.git
+Backend: Spring Boot, Spring Security (authentication and authorization), Spring Data JPA.
+Frontend: Thymeleaf (or React/Angular, depending on implementation), Bootstrap for responsive design.
+Database: MySQL or PostgreSQL (H2 for development).
+Payment Integration: PayPal API for secure ticket transactions.
+Build Tool: Maven.
+Version Control: Git.
+IDE: IntelliJ IDEA or equivalent.
+
+System Requirements
+
+Java 17 or higher.
+Maven 3.6 or later.
+MySQL or PostgreSQL (configured as per setup instructions).
+PayPal developer account for payment integration (see PayPal setup).
+Modern web browser (e.g., Chrome, Firefox, Edge).
+
+Installation Guide
+
+Clone the Repository:git clone https://github.com/phucnguyen22074/CinemaBooking.git
 cd CinemaBooking
 
 
-Cấu hình cơ sở dữ liệu:
-Tạo database, ví dụ: cinema_booking.
-Cập nhật thông tin database trong file src/main/resources/application.properties:spring.datasource.url=jdbc:mysql://localhost:3306/cinema_booking
+Configure the Database:
+Create a database (e.g., cinema_booking) in MySQL or PostgreSQL.
+Update the src/main/resources/application.properties file with your database credentials:spring.datasource.url=jdbc:mysql://localhost:3306/cinema_booking
 spring.datasource.username=root
 spring.datasource.password=your_password
 spring.jpa.hibernate.ddl-auto=update
@@ -56,60 +63,94 @@ spring.jpa.hibernate.ddl-auto=update
 
 
 
-Cài đặt phụ thuộc:mvn clean install
-
-
-Chạy ứng dụng:mvn spring-boot:run
-
-
-Truy cập ứng dụng tại: http://localhost:8089.
-
-Hướng dẫn sử dụng
-Người dùng thông thường
-
-Đăng ký/Đăng nhập: Truy cập trang chủ, nhấp vào "Đăng ký" để tạo tài khoản hoặc "Đăng nhập" để vào hệ thống.
-Lọc phim/rạp: Sử dụng bộ lọc để chọn phim hoặc rạp theo ý muốn.
-Chọn ghế: Chọn suất chiếu, sau đó chọn ghế từ sơ đồ ghế hiển thị.
-Mua vé: Xác nhận thông tin và hoàn tất thanh toán.
-Lịch sử giao dịch: Vào mục "Lịch sử mua vé" để xem các vé đã đặt.
-
-Admin
-
-Đăng nhập admin: Sử dụng tài khoản admin (liên hệ người phát triển để lấy thông tin).
-Quản lý dữ liệu:
-Truy cập giao diện quản trị (/admin) để thực hiện các thao tác CRUD.
-Quản lý các bảng: Users, Theaters, Screens, Seats, Roles, Movies, Genres, Director, Brands, Actor thông qua các biểu mẫu hoặc bảng điều khiển.
+Configure PayPal:
+Create a PayPal developer account at developer.paypal.com.
+Obtain clientId and clientSecret for the PayPal Sandbox or Live environment.
+Add PayPal credentials to application.properties:paypal.client.id=your_paypal_client_id
+paypal.client.secret=your_paypal_client_secret
+paypal.mode=sandbox  # or live
 
 
 
-Cấu trúc cơ sở dữ liệu
-Danh sách các bảng chính trong hệ thống:
 
-users: Lưu thông tin người dùng (tên, email, mật khẩu, vai trò).
-theaters: Lưu thông tin rạp chiếu (tên, địa chỉ, thương hiệu).
-screens: Lưu thông tin phòng chiếu (số phòng, rạp, sức chứa).
-seats: Lưu thông tin ghế (vị trí, trạng thái, phòng chiếu).
-roles: Lưu vai trò người dùng (admin, user).
-movies: Lưu thông tin phim (tên, thời lượng, đạo diễn, thể loại).
-genres: Lưu thể loại phim.
-director: Lưu thông tin đạo diễn.
-brands: Lưu thương hiệu rạp chiếu.
-actor: Lưu thông tin diễn viên.
+Install Dependencies:mvn clean install
 
-Lưu ý
 
-Bảo mật: Không đẩy file application.properties chứa thông tin nhạy cảm lên GitHub. Sử dụng application.properties.example làm mẫu.
-Tài khoản admin: Tài khoản admin mặc định (nếu có) cần được cấu hình trước khi sử dụng.
-Lỗi thường gặp: Kiểm tra log trong console hoặc file application.log nếu gặp sự cố khi chạy.
+Run the Application:mvnDevelop spring-boot:run
 
-Đóng góp
 
-Fork repository, tạo nhánh mới, và gửi pull request để đóng góp.
-Báo lỗi hoặc đề xuất tính năng qua mục Issues trên GitHub.
+Access the application at http://localhost:8080.
 
-Liên hệ
+Usage Instructions
+For Users
 
-Tác giả: Phúc Nguyễn
-Email: your-email@example.com
+Sign Up / Sign In: Navigate to the homepage and use the "Sign Up" or "Sign In" options.
+Browse Movies and Theaters: Use filters to find movies or theaters by location, genre, or showtime.
+Select Seats: Choose a showtime and pick seats from the interactive seat map.
+Purchase Tickets: Confirm booking details and complete payment via PayPal.
+View Booking History: Access the "Booking History" section to review past transactions, including payment details.
+
+For Admins
+
+Admin Login: Log in with admin credentials (contact the system administrator for details).
+Manage Data:
+Access the admin dashboard (e.g., /admin) to perform CRUD operations.
+Manage entities such as users, theaters, screens, seats, roles, movies, genres, directors, brands, and actors via dedicated interfaces.
+
+
+
+Database Schema
+The system relies on the following core tables:
+
+users: Stores user information (e.g., name, email, password, role).
+theaters: Contains cinema details (e.g., name, address, brand).
+screens: Manages screening rooms (e.g., room number, capacity, theater).
+seats: Tracks seat details (e.g., position, status, screen).
+roles: Defines user roles (e.g., admin, user).
+movies: Stores movie metadata (e.g., title, duration, director, genres).
+genres: Categorizes movies by genre.
+directors: Maintains director information.
+brands: Records cinema chain brands.
+actors: Stores actor details linked to movies.
+
+Security Notes
+
+Configuration Files: Exclude application.properties from version control by adding it to .gitignore. Provide a template file (application.properties.example) for reference:spring.datasource.url=jdbc:mysql://localhost:3306/cinema_booking
+spring.datasource.username=root
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=update
+paypal.client.id=
+paypal.client.secret=
+paypal.mode=sTwitter
+
+
+Admin Credentials: Admin accounts must be configured securely and not exposed in public documentation.
+PayPal Credentials: Do not commit PayPal clientId or clientSecret to the repository.
+
+Troubleshooting
+
+Database Connection Issues: Verify database credentials and ensure the database server is running.
+PayPal Payment Issues: Ensure valid PayPal Sandbox or Live credentials are configured correctly.
+Application Errors: Check logs in the console or application.log for detailed error messages.
+Git Push Errors: Ensure the correct branch (main or master) is used and commits are made before pushing:git add .
+git commit -m "Add PayPal integration"
+git push origin main
+
+
+
+Contributing
+Contributions are welcome! To contribute:
+
+Fork the repository.
+Create a feature branch (git checkout -b feature/your-feature).
+Commit your changes (git commit -m "Add your feature").
+Push to the branch (git push origin feature/your-feature).
+Open a Pull Request.
+
+Please report bugs or suggest enhancements via the Issues section on GitHub.
+Contact
+
+Author: Phúc Nguyễn
+Email: phucnguyen220704@gmail.com
 GitHub: phucnguyen22074
 
