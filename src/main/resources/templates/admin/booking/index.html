@@ -1,0 +1,213 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/admin :: mainContent('bookings', ~{this :: .content-wrapper})}">
+
+<head>
+	<title>Theater Management</title>
+</head>
+
+<body>
+
+	<div class="content-wrapper">
+		<!-- Header -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-md-6">
+						<!-- Notification Box -->
+						<div id="notificationBox" th:if="${msg}"
+							th:classappend="${msgType == 'error' ? 'notification-box error' : 'notification-box success'}"
+							style="display: none;">
+							<span th:text="${msg}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Main Content -->
+		<section class="content">
+			<div class="container-fluid">
+				<div class="card">
+					<!-- Card Header -->
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title">bookings Table</h3>
+					</div>
+					<div class="card-body table-responsive p-0">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th>ID</th>
+									<th>Name</th>
+									<th>Booking Date</th>
+									<th>Price</th>
+									<th>Seats</th>
+									<th>Movies</th>
+									<th class="text-center">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="booking : ${bookings}">
+									<td th:text="${booking.bookingId}"></td>
+									<td th:text="${booking.users.fullName}"></td>
+									<td th:text="${#dates.format(booking.bookingDate, 'dd/MM/yyyy')}"></td>
+									<td th:text="${booking.totalPrice}"></td>
+									<td>
+										<div th:if="${#sets.isEmpty(booking.bookingDetailses)}">
+											No seats available
+										</div>
+										<ul th:unless="${#sets.isEmpty(booking.bookingDetailses)}"
+											class="list-unstyled">
+											<li th:each="bookingDetail : ${booking.bookingDetailses}">
+												<span th:text="${bookingDetail.seats.seatNumber}"></span>
+											</li>
+										</ul>
+									</td>
+									<td>
+										<!-- Display movie title from the first BookingDetails -->
+										<span th:if="${#sets.isEmpty(booking.bookingDetailses)}">No movie</span>
+										<span th:unless="${#sets.isEmpty(booking.bookingDetailses)}"
+											th:text="${booking.bookingDetailses[0].showtimes.movieShowtimeScreens[0].movies.title} ?: 'No movie'"></span>
+									</td>
+									<td class="text-center"> <a
+											th:href="@{'/admin/bookings/' + ${booking.bookingId}  + '/details'}"
+											class="btn btn-info btn-sm view-more-detail" data-toggle="modal"
+											data-target="#detailsModal" th:data-id="${booking.bookingId}"
+											th:data-user-name="${booking.users.fullName}"
+											th:data-price="${booking.totalPrice}"
+											th:data-booking-date="${#dates.format(booking.bookingDate, 'dd/MM/yyyy')}"
+											th:each="bookingDetail : ${booking.bookingDetailses}"
+											th:data-seat-id="${bookingDetail.seats.seatId}"
+											th:data-bookingdetail-id="${bookingDetail.bookingDetailId}"
+											th:data-showdate="${#dates.format(bookingDetail.showtimes.showDate, 'dd/MM/yyyy')}"
+											th:data-starttime="${#dates.format(bookingDetail.showtimes.startTime, 'HH:mm')}"
+											th:data-endtime="${#dates.format(bookingDetail.showtimes.endTime, 'HH:mm')}"
+											th:data-movie-title="${booking.bookingDetailses[0].showtimes.movieShowtimeScreens[0].movies.title} ?: 'No movie'">
+											<i class="fas fa-list"></i> Deltails
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Modal Add Theater -->
+		<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-centered">
+				<!-- Form wrapper -->
+				<form th:action="@{/admin/booking/edit}" method="post" class="modal-content shadow-lg border-0">
+					<div class="modal-header bg-primary text-white">
+						<h5 class="modal-title" id="detailsModalLabel">
+							<i class="fas fa-info-circle me-2"></i> Booking Details
+						</h5>
+						<button type="button" class="btn-close btn-close-white" data-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body p-4">
+						<div class="row g-3">
+							<!-- Booking ID -->
+							<input type="hidden" class="form-control" id="bookingId" name="bookingId">
+
+							<!-- Customer -->
+							<div class="col-md-6">
+								<label class="form-label fw-bold">Customer</label>
+								<input type="text" class="form-control" id="user" readonly>
+							</div>
+							<div class="col-md-6">
+								<label class="form-label fw-bold">Movies</label>
+								<input type="text" class="form-control" id="movieTitle" readonly>
+							</div>
+							<!-- Booking Date -->
+							<div class="col-md-6">
+								<label class="form-label fw-bold">Booking Date</label>
+								<input type="text" class="form-control" id="bookingDate" name="bookingDate" required>
+							</div>
+
+							<!-- Seats -->
+							<div class="col-md-6">
+								<label for="seats" class="form-label fw-bold">Seats</label>
+								<select id="seats" class="form-control" name="seats.seatId" required>
+									<option value="">-- Select Seats --</option>
+									<option th:each="seat : ${seats}" th:value="${seat.seatId}"
+										th:text="${seat.seatNumber}"></option>
+								</select>
+							</div>
+
+							<!-- Show Date -->
+							<div class="col-md-6">
+								<label class="form-label fw-bold">Show Date</label>
+								<input type="text" class="form-control" id="showDate" name="showDate" required>
+							</div>
+
+							<!-- Price -->
+							<div class="col-md-6">
+								<label class="form-label fw-bold">Price</label>
+								<div class="input-group">
+									<span class="input-group-text">$</span>
+									<input type="number" class="form-control" id="price" name="totalPrice" step="0.01"
+										readonly>
+								</div>
+							</div>
+
+							<!-- Start Time -->
+							<div class="col-md-6">
+								<label class="form-label fw-bold">Start Time</label>
+								<input type="time" class="form-control" id="startTime" name="startTime" required>
+							</div>
+
+							<!-- End Time -->
+							<div class="col-md-6">
+								<label class="form-label fw-bold">End Time</label>
+								<input type="time" class="form-control" id="endTime" name="endTime" required>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal-footer bg-light">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">
+							<i class="fas fa-times me-1"></i> Close
+						</button>
+						<button type="submit" class="btn btn-primary">
+							<i class="fas fa-save me-1"></i> Save Changes
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	</div>
+
+</body>
+
+</html>
+<script>
+	$(document).ready(function () {
+		$(".view-more-detail").click(function () {
+			var bookingId = $(this).data("id");
+			var user = $(this).data("user-name");
+			var price = $(this).data("price");
+			var bookingDate = $(this).data("booking-date");
+			var seats = $(this).data("seat-id");
+			var showdate = $(this).data("showdate");
+			var startTime = $(this).data("starttime");
+			var endTime = $(this).data("endtime");
+			var bookingDetailId = $(this).data("bookingdetail-id");
+			var movieTitle = $(this).data("movie-title");
+			var numericPrice = parseFloat(
+				price.replace(/[^0-9.]/g, '')
+			).toFixed(2);
+
+			$("#bookingId").val(bookingId);
+			$("#user").val(user);
+			$("#bookingDate").val(bookingDate);
+			$("#price").val(numericPrice);
+			$("#seats").val(seats);
+			$("#showDate").val(showdate);
+			$("#startTime").val(startTime);
+			$("#endTime").val(endTime);
+			$("#movieTitle").val(movieTitle);
+			$("#bookingDetailId").val(bookingDetailId);
+		});
+	});
+</script>

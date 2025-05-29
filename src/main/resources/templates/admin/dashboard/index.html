@@ -1,0 +1,126 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/admin :: mainContent('Dashboard', ~{this :: .content-wrapper})}">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0">Dashboard</h1>
+					</div><!-- /.col -->
+
+				</div><!-- /.row -->
+			</div><!-- /.container-fluid -->
+		</div>
+		<!-- /.content-header -->
+
+		<!-- Main content -->
+		<section class="content">
+			<div class="container-fluid">
+				<!-- Small boxes (Stat box) -->
+				<div class="row">
+					<div class="col-lg-3 col-md-6 col-sm-12">
+						<div class="small-box bg-info">
+							<div class="inner">
+								<h3>
+									<span class="badge badge-info">
+										<th:block th:text="${@usersService.findAll().size()}"></th:block>
+									</span>
+								</h3>
+								<p>Users</p>
+							</div>
+							<div class="icon">
+								<i class="ion ion-person"></i>
+							</div>
+							<a th:href="@{/admin/users/index}" class="small-box-footer">More info <i
+									class="fas fa-arrow-circle-right"></i></a>
+						</div>
+					</div>
+
+					<div class="col-lg-3 col-md-6 col-sm-12">
+						<div class="small-box bg-success">
+							<div class="inner">
+								<h3>
+									<span class="badge badge-success">
+										<th:block th:text="${@theatersService.findAll().size()}"></th:block>
+									</span>
+								</h3>
+								<p>Theaters</p>
+							</div>
+							<div class="icon">
+								<i class="ion ion-stats-bars"></i>
+							</div>
+							<a th:href="@{/admin/theaters/index}" class="small-box-footer">More info <i
+									class="fas fa-arrow-circle-right"></i></a>
+						</div>
+					</div>
+
+					<div class="col-lg-3 col-md-6 col-sm-12">
+						<div class="small-box bg-warning">
+							<div class="inner">
+								<h3>
+									<span class="badge badge-warning">
+										<th:block th:text="${@rolesService.findAll().size()}"></th:block>
+									</span>
+								</h3>
+								<p>Roles</p>
+							</div>
+							<div class="icon">
+								<i class="ion ion-person-add"></i>
+							</div>
+							<a th:href="@{/admin/roles/index}" class="small-box-footer">More info <i
+									class="fas fa-arrow-circle-right"></i></a>
+						</div>
+					</div>
+
+					<div class="col-lg-3 col-md-6 col-sm-12">
+						<div class="small-box bg-danger">
+							<div class="inner">
+								<h3>
+									<span class="badge badge-danger">
+										<th:block th:text="${@brandsService.findAll().size()}"></th:block>
+									</span>
+								</h3>
+								<p>Brands</p>
+							</div>
+							<div class="icon">
+								<i class="ion ion-pie-graph"></i>
+							</div>
+							<a th:href="@{/admin/brands/index}" class="small-box-footer">More info <i
+									class="fas fa-arrow-circle-right"></i></a>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-6 col-sm-12">
+						<div class="small-box bg-info">
+							<div class="inner">
+								<h3>
+									<span class="badge badge-info">
+										<th:block th:text="${@locationsService.findAll().size()}"></th:block>
+									</span>
+								</h3>
+								<p>Locations</p>
+							</div>
+							<div class="icon">
+								<i class="ion ion-pie-graph"></i>
+							</div>
+							<a th:href="@{/admin/locations/index}" class="small-box-footer">More info <i
+									class="fas fa-arrow-circle-right"></i></a>
+						</div>
+					</div>
+				</div>
+
+			</div><!-- /.container-fluid -->
+		</section>
+		<!-- /.content -->
+	</div>
+
+</body>
+
+</html>

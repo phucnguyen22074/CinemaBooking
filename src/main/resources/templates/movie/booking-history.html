@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/user :: mainContent('Booking History', ~{this :: .span9})}">
+<head>
+    <title>Booking History</title>
+</head>
+<body>
+    <div class="span9">
+        <!-- Breadcrumb -->
+        <section class="breadcrumb-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb-area-content">
+                            <h1>Booking History</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <section class="details-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <!-- Display booking history list -->
+                        <div th:if="${bookingHistory != null && !bookingHistory.isEmpty()}">
+                            <h2>Booking List</h2>
+                            <table class="table booking-table">
+                                <thead>
+                                    <tr>
+                                        <th>Movie</th> <!-- Thêm cột Movie -->
+                                        <th>Theater</th>
+                                        <th>Screen</th>
+                                        <th>Seats</th>
+                                        <th>Show Date</th>
+                                        <th>Show Time</th>
+                                        <th>QR Code</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item : ${bookingHistory}">
+                                        <td th:text="${item['movieTitle']}"></td>
+                                        <td th:text="${item['theater']}"></td>
+                                        <td th:text="${item['screen']}"></td>
+                                        <td>
+                                            <!-- Display seat list -->
+                                            <span th:each="seat, iterStat : ${item['seats']}" 
+                                                  th:text="${seat} + (${!iterStat.last ? ', ' : ''})"></span>
+                                        </td>
+                                        <td th:text="${item['showDate']}"></td>
+                                        <td th:text="${item['startTime']}"></td>
+                                        <td>
+                                            <img th:src="${'https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=' + item['qrCode']}" alt="QR Code" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Notification if there is no booking history -->
+                        <div th:if="${bookingHistory == null || bookingHistory.isEmpty()}" class="text-center no-bookings">
+                            <h2>You don’t have any booking history yet.</h2>
+                            <p>Please book a ticket to view your history.</p>
+                            <a href="/" class="theme-btn">Return to homepage</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

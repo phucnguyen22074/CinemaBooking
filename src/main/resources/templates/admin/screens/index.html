@@ -1,0 +1,269 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/admin :: mainContent('Screens', ~{this :: .content-wrapper})}">
+
+<head>
+	<title>Screens Management</title>
+</head>
+
+<body>
+
+	<div class="content-wrapper">
+		<!-- Header -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-md-6">
+						<!-- Notification Box -->
+						<div id="notificationBox" th:if="${msg}"
+							th:classappend="${msgType == 'error' ? 'notification-box error' : 'notification-box success'}"
+							style="display: none;">
+							<span th:text="${msg}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Main Content -->
+		<section class="content">
+			<div class="container-fluid">
+				<div class="card">
+					<!-- Card Header -->
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title">Screens Table</h3>
+						<div class="ml-auto">
+							<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addscreenModal">
+								<i class="fas fa-plus"></i> Add Screens
+							</a>
+						</div>
+					</div>
+					<div class="card-body">
+						<!-- Filter Form -->
+						<form th:action="@{/admin/screens/filter}" method="get" class="mb-4">
+							<div class="row">
+								<!-- Filter by Name Screen -->
+								<div class="col-md-4">
+									<label><strong>Name Screen:</strong></label>
+									<input type="text" name="nameScreen" id="nameScreen" class="form-control"
+										placeholder="Enter screen name..." />
+								</div>
+
+								<!-- Filter by Name Theater -->
+								<div class="col-md-4">
+									<label><strong>Name Theater:</strong></label>
+									<select name="nameTheater" id="nameTheater" class="form-control">
+										<option value="">All Theaters</option>
+										<option th:each="theater : ${theaters}" th:value="${theater.name}"
+											th:text="${theater.name}">
+										</option>
+									</select>
+								</div>
+								<!-- Filter by Seats -->
+								<div class="col-md-4">
+									<label><strong>Seats:</strong></label>
+									<input type="number" name="seats" id="seats" class="form-control"
+										placeholder="Enter seats..." />
+								</div>
+							</div>
+
+							<!-- Submit Button -->
+							<div class="mt-3 text-right">
+								<button type="submit" class="btn btn-primary px-4">
+									<i class="fa fa-filter"></i> Filter
+								</button>
+							</div>
+						</form>
+					</div>
+					<!-- Table -->
+					<div class="card-body table-responsive p-0">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th>ID</th>
+									<th>Name Screen</th>
+									<th>Name Theater</th>
+									<th>Total Seat</th>
+									<th class="text-center">Actions</th>
+									<th class="text-center">View Seats</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="screen : ${screens}">
+									<td th:text="${screen.screenId}"></td>
+									<td th:text="${screen.name}"></td>
+									<td th:text="${screen.theaters.name}"></td>
+									<td th:text="${screen.totalSeats}"></td>
+									<td class="text-center">
+										<a href="#" class="btn btn-sm btn-warning edit-screen-btn"
+											th:data-id="${screen.screenId}" th:data-name="${screen.name}"
+											th:data-theater-id="${screen.theaters.theaterId}"
+											th:data-totalseats="${screen.totalSeats}" data-toggle="modal"
+											data-target="#editScreenModal">
+											<i class="fas fa-edit"></i>Edit
+										</a>
+										<a th:href="@{/admin/screens/delete/{id}(id=${screen.screenId})}"
+											class="btn btn-sm btn-danger">
+											<i class="fas fa-trash"></i>Delete
+										</a>
+									</td>
+									<td class="text-center">
+										<a th:href="@{'/admin/screens/' + ${screen.screenId}} + '/seats'"
+											class="btn btn-info btn-sm">
+											<i class="fas fa-couch"></i>View Seat
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- Pagination -->
+					<div class="card-footer clearfix">
+						<div class="float-left">
+							<form th:action="@{/admin/screens/index}" method="get" class="form-inline">
+								<label for="size">Show:</label>
+								<select name="size" id="size" onchange="this.form.submit()" class="form-control ml-2">
+									<option value="10" th:selected="${size == 10}">10</option>
+									<option value="20" th:selected="${size == 20}">20</option>
+									<option value="50" th:selected="${size == 50}">50</option>
+								</select>
+							</form>
+						</div>
+						<ul class="pagination pagination-sm m-0 float-right">
+							<!-- Previous Button -->
+							<li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+								<a th:href="@{/admin/screens/index(page=${currentPage - 1}, size=${size})}"
+									class="page-link">Previous</a>
+							</li>
+
+							<!-- Page Numbers -->
+							<li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+								th:class="${pageNumber == currentPage ? 'page-item active' : 'page-item'}">
+								<a th:href="@{/admin/screens/index(page=${pageNumber}, size=${size})}" class="page-link"
+									th:text="${pageNumber + 1}"></a>
+							</li>
+
+							<!-- Next Button -->
+							<li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
+								<a th:href="@{/admin/screens/index(page=${currentPage + 1}, size=${size})}"
+									class="page-link">Next</a>
+							</li>
+						</ul>
+
+
+						<div class="modal fade" id="addscreenModal" tabindex="-1" aria-labelledby="addscreenModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="addscreenModalLabel">Add screen</h5>
+										<button type="button" class="close" data-dismiss="modal">
+											<span>&times;</span>
+										</button>
+									</div>
+
+									<form th:action="@{/admin/screens/save}" method="post" th:object="${screen}">
+										<div class="modal-body">
+											<!-- Name Field -->
+											<div class="form-group">
+												<label for="screenName">Name Screens</label>
+												<input type="text" class="form-control" id="screenName"
+													th:field="*{name}" required>
+											</div>
+											<div class="form-group">
+												<label for="screenTheater">Theaters</label>
+												<select id="screenTheater" class="form-control" name="theaters"
+													required>
+													<option value="">Select Theaters</option>
+													<option th:each="theater : ${theaters}"
+														th:value="${theater.theaterId}" th:text="${theater.name}">
+													</option>
+												</select>
+											</div>
+											<div class="form-group">
+												<label for="screenName">Total Seat</label>
+												<input type="text" class="form-control" id="screenName"
+													th:field="*{totalSeats}" required>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary"
+												data-dismiss="modal">Close</button>
+											<button type="submit" class="btn btn-primary">Save</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<!-- Modal Edit Screen -->
+						<div class="modal fade" id="editScreenModal" tabindex="-1" role="dialog"
+							aria-labelledby="editScreenModalLabel" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="editScreenModalLabel">Edit Screen</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<!-- Form Edit -->
+										<form id="editScreenForm" th:action="@{/admin/screens/edit}" method="post">
+											<input type="hidden" name="screenId" id="editScreenId" />
+
+											<div class="form-group">
+												<label for="editScreenName">Name</label>
+												<input type="text" class="form-control" id="editScreenName" name="name"
+													required />
+											</div>
+
+											<div class="form-group">
+												<label for="editScreenTheater">Theater</label>
+												<select id="editScreenTheater" class="form-control"
+													name="theaters.theaterId" required>
+													<option value="">Select Theater</option>
+													<option th:each="theater : ${theaters}"
+														th:value="${theater.theaterId}" th:text="${theater.name}">
+													</option>
+												</select>
+											</div>
+
+											<div class="form-group">
+												<label for="editTotalSeats">Total Seats</label>
+												<input type="number" class="form-control" id="editTotalSeats"
+													name="totalSeats" required />
+											</div>
+
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary"
+													data-dismiss="modal">Cancel</button>
+												<button type="submit" class="btn btn-primary">Save Changes</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</body>
+
+</html>
+<script>
+	$(document).ready(function () {
+		$('.edit-screen-btn').on('click', function () {
+			var screenId = $(this).data('id');
+			var screenName = $(this).data('name');
+			var theaterId = $(this).data('theater-id');
+			var totalseats = $(this).data('totalseats');
+
+			$('#editScreenId').val(screenId);
+			$('#editScreenName').val(screenName);
+			$('#editScreenTheater').val(theaterId);
+			$('#editTotalSeats').val(totalseats);
+
+			$('#editScreenModal').modal('show');
+		});
+	});
+</script>

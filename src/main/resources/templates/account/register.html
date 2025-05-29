@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/user :: mainContent('Register',~{this :: .span9})}">
+
+<head>
+	<title></title>
+</head>
+
+<body>
+	<div class="span9">
+		<section class="register-area" id="register">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-6">
+						<div class="register-form">
+							<h2 class="text-center">Register</h2>
+							<form th:action="@{/account/save}" method="post" th:object="${user}">
+								<div class="form-group">
+									<label for="fullName">Full Name</label>
+									<input type="text" id="fullName" th:field="*{fullName}" class="form-control" />
+									<small class="error-message" th:if="${#fields.hasErrors('fullName')}"
+										th:errors="*{fullName}"></small>
+								</div>
+
+								<div class="form-group">
+									<label for="dob">Date of Birth</label>
+									<input type="text" id="dob" th:field="*{dob}" name="dob" class="form-control" />
+									<small class="error-message" th:if="${#fields.hasErrors('dob')}"
+										th:errors="*{dob}"></small>
+								</div>
+
+								<div class="form-group">
+									<label for="email">Email</label>
+									<input type="email" id="email" th:field="*{email}" class="form-control" />
+									<small class="error-message" th:if="${#fields.hasErrors('email')}"
+										th:errors="*{email}"></small>
+								</div>
+
+								<div class="form-group">
+									<label for="password">Password</label>
+									<input type="password" id="password" th:field="*{password}" class="form-control" />
+									<small class="error-message" th:if="${#fields.hasErrors('password')}"
+										th:errors="*{password}"></small>
+								</div>
+
+								<div class="form-group text-center">
+									<button type="submit" class="btn btn-primary">Register</button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</body>
+
+</html>

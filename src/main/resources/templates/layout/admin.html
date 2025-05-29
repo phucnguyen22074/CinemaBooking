@@ -1,0 +1,279 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:fragment="mainContent(title, content)">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>AdminLTE 3 | Dashboard</title>
+
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" th:href="@{/assets/admin/plugins/fontawesome-free/css/all.min.css}">
+
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+	<!-- Theme style -->
+	<link rel="stylesheet" th:href="@{/assets/admin/dist/css/adminlte.min.css}">
+
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+
+	<script>
+		// Function to show notification
+		document.addEventListener("DOMContentLoaded", function () {
+			const notificationBox = document.getElementById("notificationBox");
+
+			// Check if notification exists
+			if (notificationBox) {
+				// Show the notification with slide-in effect
+				notificationBox.style.display = "block";
+				setTimeout(() => {
+					notificationBox.classList.add("slide-in");
+				}, 10);
+
+				// Auto-hide after 5 seconds
+				setTimeout(() => {
+					notificationBox.classList.remove("slide-in");
+					notificationBox.classList.add("fade-out");
+					setTimeout(() => {
+						notificationBox.style.display = "none";
+						notificationBox.classList.remove("fade-out");
+					}, 500); // Match the duration of the fade-out animation
+				}, 5000); // 5 seconds
+			}
+		});
+	</script>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+	<div class="wrapper">
+		<!-- Main Sidebar Container -->
+		<aside class="main-sidebar sidebar-dark-primary elevation-4">
+			<!-- Brand Logo -->
+			<a th:href="@{/admin/dashboard/index}" class="brand-link">
+				<img th:src="@{/assets/admin/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo"
+					class="brand-image img-circle elevation-3" style="opacity: .8">
+				<span class="brand-text font-weight-light">AdminLTE 3</span>
+			</a>
+
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<!-- Sidebar User Panel -->
+				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+					<div class="image">
+						<img th:src="@{/assets/admin/dist/img/user2-160x160.jpg}" class="img-circle elevation-2"
+							alt="User Image">
+					</div>
+					<div class="info">
+						<strong sec:authorize="isAuthenticated()">
+							<a th:href="@{/admin/profile/index}" sec:authentication="name"></a>
+						</strong>
+					</div>
+				</div>
+
+				<!-- Sidebar Menu -->
+				<nav class="mt-2">
+					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+						data-accordion="false">
+						<!-- Users -->
+						<li class="nav-item">
+							<a th:href="@{/admin/users/index}" class="nav-link">
+								<i class="nav-icon fas fa-users"></i>
+								<p>
+									Users
+									<span class="badge badge-info right">
+										<th:block th:text="${@usersService.findAll().size()}"></th:block>
+									</span>
+								</p>
+							</a>
+						</li>
+						<!-- Theaters -->
+						<li class="nav-item">
+							<a th:href="@{/admin/theaters/index}" class="nav-link">
+								<i class="nav-icon fas fa-building"></i>
+								<p>
+									Theaters
+									<span class="badge badge-info right">
+										<th:block th:text="${@theatersService.findAll().size()}"></th:block>
+									</span>
+								</p>
+							</a>
+						</li>
+						<!-- Roles -->
+						<li class="nav-item">
+							<a th:href="@{/admin/roles/index}" class="nav-link">
+								<i class="nav-icon fas fa-user-shield"></i>
+								<p>
+									Roles
+									<span class="badge badge-info right">
+										<th:block th:text="${@rolesService.findAll().size()}"></th:block>
+									</span>
+								</p>
+							</a>
+						</li>
+						<!-- Brands -->
+						<li class="nav-item">
+							<a th:href="@{/admin/brands/index}" class="nav-link">
+								<i class="nav-icon fas fa-copyright"></i>
+								<p>
+									Brands
+									<span class="badge badge-info right">
+										<th:block th:text="${@brandsService.findAll().size()}"></th:block>
+									</span>
+								</p>
+							</a>
+						</li>
+						<!-- Locations -->
+						<li class="nav-item">
+							<a th:href="@{/admin/locations/index}" class="nav-link">
+								<i class="nav-icon fas fa-map-marked-alt"></i>
+								<p>
+									Locations
+									<span class="badge badge-info right">
+										<th:block th:text="${@locationsService.findAll().size()}"></th:block>
+									</span>
+								</p>
+							</a>
+						</li>
+						<!-- Movies -->
+						<li class="nav-item">
+							<a th:href="@{/admin/movies/index}" class="nav-link">
+								<i class="nav-icon fas fa-film"></i>
+								<p>
+									Movies
+									<span class="badge badge-info right">
+										<th:block th:text="${@moviesService.findAll().size()}"></th:block>
+									</span>
+								</p>
+							</a>
+						</li>
+						<!-- Screens -->
+						<li class="nav-item">
+							<a th:href="@{/admin/screens/index}" class="nav-link">
+								<i class="nav-icon fas fa-desktop"></i>
+								<p>
+									Screens
+									<span class="badge badge-info right">
+										<th:block th:text="${@screensService.findAllSize().size()}"></th:block>
+									</span>
+								</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href="@{/admin/actor/index}" class="nav-link">
+								<i class="nav-icon fas fa-user"></i>
+								<p>
+									Actors
+									<span class="badge badge-info right">
+										<th:block th:text="${@actorService.findAll().size()}"></th:block>
+									</span>
+								</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href="@{/admin/director/index}" class="nav-link">
+								<i class="nav-icon fas fa-video"></i>
+								<p>
+									Director
+									<span class="badge badge-info right">
+										<th:block th:text="${@directorService.findAll().size()}"></th:block>
+									</span>
+								</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href="@{/admin/showtime/index}" class="nav-link">
+								<i class="nav-icon fas fa-clock"></i>
+								<p>
+									Showtime
+									<span class="badge badge-info right">
+										<th:block th:text="${@showtimeService.findAllSize().size()}"></th:block>
+									</span>
+								</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a th:href="@{/admin/booking/index}" class="nav-link">
+								<i class="nav-icon fas fa-calendar-check"></i>
+								<p>
+									Booking
+									<span class="badge badge-info right">
+										<th:block th:text="${@bookingService.findAllSize().size()}"></th:block>
+									</span>
+								</p>
+							</a>
+						</li>
+						
+					</ul>
+				</nav>
+			</div>
+		</aside>
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-md-6">
+						<!-- Notification Box -->
+						<div id="notificationBox" th:if="${msg}"
+							th:classappend="${msgType == 'error' ? 'notification-box error' : 'notification-box success'}"
+							style="display: none;">
+							<span th:text="${msg}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Content Wrapper -->
+		<th:block th:replace="${content}"></th:block>
+
+		<!-- Footer -->
+		<footer class="main-footer">
+			<strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+			All rights reserved.
+			<div class="float-right d-none d-sm-inline-block">
+				<b>Version</b> 3.2.0
+			</div>
+		</footer>
+	</div>
+
+	<!-- Scripts -->
+	<script th:src="@{/assets/admin/plugins/jquery/jquery.min.js}"></script>
+	<script th:src="@{/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/assets/admin/dist/js/adminlte.min.js}"></script>
+
+	<!-- Datepicker -->
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+	<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
+	<script>
+		$(function () {
+			$("#startDate, #dob, #endDate,#editShowDate,#showDate,#bookingDate").datepicker({
+				dateFormat: 'dd/mm/yy'
+			});
+
+		});
+
+		document.addEventListener("DOMContentLoaded", function () {
+			const toggleFilterButton = document.getElementById("toggleFilterButton");
+			const filterFormContainer = document.getElementById("filterFormContainer");
+
+			// Xử lý sự kiện khi nhấn nút "Show Filter"
+			toggleFilterButton.addEventListener("click", function () {
+				if (filterFormContainer.style.display === "none") {
+					filterFormContainer.style.display = "block"; // Hiển thị form
+					toggleFilterButton.innerHTML = '<i class="fa fa-filter"></i> Hide Filter'; // Đổi nhãn nút
+				} else {
+					filterFormContainer.style.display = "none"; // Ẩn form
+					toggleFilterButton.innerHTML = '<i class="fa fa-filter"></i> Show Filter'; // Đổi nhãn nút
+				}
+			});
+
+		});
+
+	</script>
+</body>
+
+</html>

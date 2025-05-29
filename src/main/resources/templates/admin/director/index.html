@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/admin :: mainContent('directors', ~{this :: .content-wrapper})}">
+
+<head>
+	<title>Theater Management</title>
+</head>
+
+<body>
+	<div class="content-wrapper">
+		<!-- Header -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-md-6">
+						<!-- Notification Box -->
+						<div id="notificationBox" th:if="${msg}"
+							th:classappend="${msgType == 'error' ? 'notification-box error' : 'notification-box success'}"
+							style="display: none;">
+							<span th:text="${msg}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Main Content -->
+		<section class="content">
+			<div class="container-fluid">
+				<div class="card">
+					<!-- Card Header -->
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title">director Table</h3>
+						<div class="ml-auto">
+							<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#adddirectorModal">
+								<i class="fas fa-plus"></i> Add director
+							</a>
+						</div>
+					</div>
+
+					<!-- Table -->
+					<div class="card-body table-responsive p-0">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th>ID</th>
+									<th>Name</th>
+									<th>Image</th>
+									<th class="text-center">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- Fixed th:each to iterate over 'directors' instead of 'director' -->
+								<tr th:each="director : ${directors}">
+									<td th:text="${director.id}"></td>
+									<td th:text="${director.name}"></td>
+									<td>
+										<img th:src="@{'/assets/hinhanh/director/' + ${director.imageUrl}}" alt="director Image"
+											width="100" height="100" />
+									</td>
+									<td class="text-center">
+										<a href="#" class="btn btn-warning btn-sm edit-director-btn"
+											th:data-id="${director.id}" th:data-name="${director.name}"
+											th:data-director-image="${director.imageUrl}" data-toggle="modal"
+											data-target="#editdirectorModal">
+											<i class="fas fa-edit"></i> Edit
+										</a>
+										<a th:href="@{'/admin/director/delete/' + ${director.id}}"
+											class="btn btn-danger btn-sm">
+											<i class="fas fa-trash"></i> Delete
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer clearfix">
+						<div class="float-left">
+							<form th:action="@{/admin/director/index}" method="get" class="form-inline">
+								<label for="size">Show:</label>
+								<select name="size" id="size" onchange="this.form.submit()" class="form-control ml-2">
+									<option value="5" th:selected="${size == 5}">5</option>
+									<option value="10" th:selected="${size == 10}">10</option>
+									<option value="15" th:selected="${size == 15}">15</option>
+								</select>
+							</form>
+						</div>
+						<ul class="pagination pagination-sm m-0 float-right">
+							<!-- Previous Button -->
+							<li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+								<a th:href="@{/admin/director/index(directorId=${selecteddirectorId}, page=${currentPage - 1}, size=${size})}"
+									class="page-link">Previous</a>
+							</li>
+
+							<!-- Page Numbers -->
+							<li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+								th:class="${pageNumber == currentPage ? 'page-item active' : 'page-item'}">
+								<a th:href="@{/admin/director/index(directorId=${selecteddirectorId}, page=${pageNumber}, size=${size})}"
+									class="page-link" th:text="${pageNumber + 1}"></a>
+							</li>
+
+							<!-- Next Button -->
+							<li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
+								<a th:href="@{/admin/director/index(directorId=${selecteddirectorId}, page=${currentPage + 1}, size=${size})}"
+									class="page-link">Next</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Modal Add director -->
+		<div class="modal fade" id="adddirectorModal" tabindex="-1" aria-labelledby="adddirectorModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="adddirectorModalLabel">Add director</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span>&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<!-- Add form here if needed -->
+						<form th:action="@{/admin/director/save}" method="post" enctype="multipart/form-data">
+							<div class="form-group">
+								<label for="directorName">Name</label>
+								<input type="text" class="form-control" id="directorName" name="name" required />
+							</div>
+							<div class="form-group">
+								<label for="directorImage">Image</label>
+								<input type="file" class="form-control" id="directorImage" name="file" />
+							</div>
+							<button type="submit" class="btn btn-primary">Save</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal Edit director -->
+		<div class="modal fade" id="editdirectorModal" tabindex="-1" aria-labelledby="editdirectorModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="editdirectorModalLabel">Edit director</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span>&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<!-- Edit form -->
+						<form th:action="@{/admin/director/edit}" method="post" enctype="multipart/form-data">
+							<input type="hidden" id="editDirectorId" name="id" />
+							<div class="form-group">
+								<label for="editdirectorName">Name</label>
+								<input type="text" class="form-control" id="editDirectorName" name="name" required />
+							</div>
+							<div class="form-group">
+								<label for="editBrandImage">Change Image</label>
+								<input type="file" class="form-control-file" id="editDirectorImge" name="file" />
+								<img id="editdirectorImge" src="#" alt="Brand Image" width="100" height="100"
+									style="display:none; margin-top: 10px;" />
+							</div>
+							<button type="submit" class="btn btn-primary">Update</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- JavaScript -->
+
+</body>
+
+</html>
+<script>
+	$(document).ready(function () {
+		$(".edit-director-btn").click(function () {
+			var directorId = $(this).data("id");
+			var directorName = $(this).data("name");
+			var directorImage = $(this).data("director-image");
+			$("#editDirectorId").val(directorId);
+			$("#editDirectorName").val(directorName);
+
+		});
+		var imgPreview = document.getElementById("editDirectorImage");
+		if (imageUrl) {
+			imgPreview.src = "/assets/hinhanh/" + imageUrl;
+			imgPreview.style.display = "block";
+		} else {
+			imgPreview.style.display = "none";
+		}
+
+		// Show notification box if it exists
+		if ($("#notificationBox").length) {
+			$("#notificationBox").fadeIn(500).delay(3000).fadeOut(500);
+		}
+	});
+</script>

@@ -1,0 +1,161 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/admin :: mainContent('Roles', ~{this :: .content-wrapper})}">
+
+<head>
+	<title>Theater Management</title>
+</head>
+
+<body>
+
+	<div class="content-wrapper">
+		<!-- Header -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-md-6">
+						<!-- Notification Box -->
+						<div id="notificationBox" th:if="${msg}"
+							th:classappend="${msgType == 'error' ? 'notification-box error' : 'notification-box success'}"
+							style="display: none;">
+							<span th:text="${msg}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Main Content -->
+		<section class="content">
+			<div class="container-fluid">
+				<div class="card">
+					<!-- Card Header -->
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title">Roles Table</h3>
+						<div class="ml-auto">
+							<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addRoleModal">
+								<i class="fas fa-plus"></i> Add Role
+							</a>
+						</div>
+					</div>
+
+					<!-- Filter Form -->
+					<form th:action="@{/admin/roles/filter}" method="get" class="p-3">
+						<div class="form-row align-items-end">
+							<div class="col-md-4">
+								<label><strong>Role:</strong></label>
+								<select name="roleId" class="form-control">
+									<option value="">All Roles</option>
+									<option th:each="role : ${roles}" th:value="${role.roleId}" th:text="${#strings.replace(role.name, 'ROLE_', '')}"
+										th:selected="${role.roleId == selectedRoleId}">
+									</option>
+								</select>
+							</div>
+							<div class="col-md-4">
+								<button type="submit" class="btn btn-primary">
+									<i class="fa fa-filter"></i> Filter
+								</button>
+							</div>
+						</div>
+					</form>
+
+					<!-- Table -->
+					<div class="card-body table-responsive p-0">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th>ID</th>
+									<th>Name</th>
+									<th class="text-center">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="role : ${filteredRoles}">
+									<td th:text="${role.roleId}"></td>
+									<td th:text="${#strings.replace(role.name, 'ROLE_', '')}"></td>
+									<td class="text-center">
+										<a href="#" class="btn btn-warning btn-sm edit-role-btn"
+											th:data-id="${role.roleId}" th:data-name="${role.name}" data-toggle="modal"
+											data-target="#editRoleModal">
+											<i class="fas fa-edit"></i> Edit
+										</a>
+										<a th:href="@{'/admin/roles/delete/' + ${role.roleId}}"
+											class="btn btn-danger btn-sm">
+											<i class="fas fa-trash"></i> Delete
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Modal Add Theater -->
+		<div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addRoleModalLabel">Add Role</h5>
+						<button type="button" class="close" data-dismiss="modal">
+							<span>&times;</span>
+						</button>
+					</div>
+
+					<form th:action="@{/admin/roles/save}" method="post" th:object="${role}">
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="theaterName">Name</label>
+								<input type="text" class="form-control" id="roleName" th:field="*{name}" required>
+							</div>
+
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="editRoleModal" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Edit Role</h5>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<form id="editRoleForm" th:action="@{/admin/roles/edit}" method="post">
+						<div class="modal-body">
+							<input type="hidden" id="editRoleId" name="roleId">
+							<div class="form-group">
+								<label>Role Name</label>
+								<input type="text" class="form-control" id="editRoleName" name="name">
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Update</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	</div>
+
+</body>
+
+</html>
+<script>
+	$(document).ready(function () {
+		$(".edit-role-btn").click(function () {
+			var roleId = $(this).data("id");
+			var roleName = $(this).data("name");
+
+			$("#editRoleId").val(roleId);
+			$("#editRoleName").val(roleName);
+		});
+	});
+</script>

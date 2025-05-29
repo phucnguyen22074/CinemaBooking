@@ -1,0 +1,289 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/admin :: mainContent('Showtimes', ~{this :: .content-wrapper})}">
+
+<body>
+	<div class="content-wrapper">
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-md-6">
+						<!-- Notification Box -->
+						<div id="notificationBox" th:if="${msg}"
+							th:classappend="${msgType == 'error' ? 'notification-box error' : 'notification-box success'}"
+							style="display: none;">
+							<span th:text="${msg}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="content">
+			<div class="container-fluid">
+				<div class="card">
+					<!-- Card Header -->
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title">Showtimes Table</h3>
+						<div class="ml-auto">
+							<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addshowtimesModal">
+								<i class="fas fa-plus"></i> Add Showtimes
+							</a>
+						</div>
+					</div>
+					<!-- Table -->
+					<div class="card-body table-responsive p-0">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th>ID</th>
+									<th>ShowDate</th>
+									<th>Time Movies</th>
+									<th>Movies</th>
+									<th>Screens</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="showtime : ${showtimes}">
+									<!-- Showtime ID -->
+									<td th:text="${showtime.showtimeId}"></td>
+
+									<!-- Show Date -->
+									<td th:text="${#dates.format(showtime.showDate, 'dd/MM/yyyy')}"></td>
+
+									<!-- Start Time and End Time -->
+									<td>
+										<span th:text="${#dates.format(showtime.startTime, 'HH:mm')}"></span> -
+										<span th:text="${#dates.format(showtime.endTime, 'HH:mm')}"></span>
+									</td>
+
+									<!-- Movies List -->
+									<td>
+										<div th:if="${#sets.isEmpty(showtime.movieShowtimeScreens)}">
+											No movies available
+										</div>
+										<ul th:unless="${#sets.isEmpty(showtime.movieShowtimeScreens)}"
+											class="list-unstyled">
+											<li th:each="movieShowtimeScreen : ${showtime.movieShowtimeScreens}">
+												<span th:text="${movieShowtimeScreen.movies.title}"></span>
+											</li>
+										</ul>
+									</td>
+									<td>
+										<div th:if="${#sets.isEmpty(showtime.movieShowtimeScreens)}">
+											No Screens available
+										</div>
+										<ul th:unless="${#sets.isEmpty(showtime.movieShowtimeScreens)}"
+											class="list-unstyled">
+											<li th:each="movieShowtimeScreen : ${showtime.movieShowtimeScreens}">
+												<span th:text="${movieShowtimeScreen.screens.name}"></span>
+											</li>
+										</ul>
+									</td>
+									<td>
+										<a href="#" class="btn btn-warning btn-sm edit-movies-btn" data-toggle="modal"
+											data-target="#editShowtimeModal" th:data-id="${showtime.showtimeId}"
+											th:data-showdate="${#dates.format(showtime.showDate, 'dd/MM/yyyy')}"
+											th:data-starttime="${#dates.format(showtime.startTime, 'HH:mm:ss')}"
+											th:data-endtime="${#dates.format(showtime.endTime, 'HH:mm:ss')}"
+											th:each="movieShowtimeScreen : ${showtime.movieShowtimeScreens}"
+											th:data-movie-id="${movieShowtimeScreen.movies.movieId}"
+											th:data-screen-id="${movieShowtimeScreen.screens.screenId}">
+											<i class="fa fa-edit"></i>Edit</a>
+										<a class="btn btn-danger btn-sm ml-2"
+											th:href="@{'/admin/showtime/delete/' + ${showtime.showtimeId}}">
+											<i class="fa fa-trash"></i> Delete
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer clearfix">
+						<div class="float-left">
+							<form th:action="@{/admin/showtime/index}" method="get" class="form-inline">
+								<label for="size">Show:</label>
+								<select name="size" id="size" onchange="this.form.submit()" class="form-control ml-2">
+									<option value="5" th:selected="${size == 5}">5</option>
+									<option value="10" th:selected="${size == 10}">10</option>
+									<option value="15" th:selected="${size == 15}">15</option>
+								</select>
+							</form>
+						</div>
+						<ul class="pagination pagination-sm m-0 float-right">
+							<!-- Previous Button -->
+							<th:block th:if="${totalPages > 0}">
+								<ul class="pagination pagination-sm m-0 float-right">
+									<!-- Previous Button -->
+									<li th:class="${(currentPage ?: 0) == 0} ? 'page-item disabled' : 'page-item'">
+										<a th:href="@{/admin/showtime/index(showtimeId=${selectedShowtimeId}, page=${(currentPage ?: 0) - 1}, size=${size})}"
+											class="page-link">Previous</a>
+									</li>
+
+									<!-- Page Numbers -->
+									<li th:each="pageNumber : ${#numbers.sequence(0, (totalPages ?: 1) - 1)}"
+										th:class="${pageNumber == (currentPage ?: 0)} ? 'page-item active' : 'page-item'">
+										<a th:href="@{/admin/showtime/index(showtimeId=${selectedShowtimeId}, page=${pageNumber}, size=${size})}"
+											class="page-link" th:text="${pageNumber + 1}"></a>
+									</li>
+
+									<!-- Next Button -->
+									<li
+										th:class="${(currentPage ?: 0) == (totalPages - 1)} ? 'page-item disabled' : 'page-item'">
+										<a th:href="@{/admin/showtime/index(showtimeId=${selectedShowtimeId}, page=${(currentPage ?: 0) + 1}, size=${size})}"
+											class="page-link">Next</a>
+									</li>
+								</ul>
+							</th:block>
+						</ul>
+					</div>
+					<div class="modal fade" id="addshowtimesModal" tabindex="-1"
+						aria-labelledby="addshowtimesModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="addshowtimesModalLabel">Add Showtimes</h5>
+									<button type="button" class="close" data-dismiss="modal">
+										<span>&times;</span>
+									</button>
+								</div>
+								<form th:action="@{/admin/showtime/save}" method="post" th:object="${showtime}">
+									<div class="modal-body">
+										<!-- Show Date -->
+										<div class="form-group">
+											<label for="showDate">Show Date</label>
+											<input type="text" class="form-control" id="showDate" name="showDate"
+												th:field="*{showDate}">
+										</div>
+
+										<!-- Start Time -->
+										<div class="form-group">
+											<label for="startTime">Start Time</label>
+											<input type="time" class="form-control" id="startTime" name="startTime"
+												th:field="*{startTime}">
+										</div>
+
+										<!-- End Time -->
+										<div class="form-group">
+											<label for="endTime">End Time</label>
+											<input type="time" class="form-control" id="endTime" name="endTime"
+												th:field="*{endTime}">
+										</div>
+
+										<!-- Movie Selection -->
+										<div class="form-group">
+											<label>Movies</label>
+											<select class="form-control" id="movieId" name="movieId">
+												<option value="">-- Select Movie --</option>
+												<option th:each="movie : ${movies}" th:value="${movie.movieId}"
+													th:text="${movie.title}">
+												</option>
+											</select>
+										</div>
+										<!-- Screen Selection -->
+										<div class="form-group">
+											<label>Screens</label>
+											<select class="form-control" id="screenId" name="screenId">
+												<option value="">-- Select Screen --</option>
+												<option th:each="screen : ${screens}" th:value="${screen.screenId}"
+													th:text="${screen.name}"></option>
+											</select>
+										</div>
+
+									</div>
+
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Save</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<div class="modal fade" id="editShowtimeModal" tabindex="-1" role="dialog">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Edit Showtime</h5>
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+								</div>
+								<form id="editShowtimeForm" th:action="@{/admin/showtime/edit}" method="post">
+									<div class="modal-body">
+										<input type="hidden" id="editShowtimeId" name="showtimeId">
+										<div class="form-group">
+											<label for="editShowDate">Show Date</label>
+											<input type="text" class="form-control" id="editShowDate" name="showDate"
+												th:value="${#dates.format(showtime.showDate, 'dd/MM/yyyy')}">
+										</div>
+
+										<div class="form-group">
+											<label for="editStartTime">Start Time</label>
+											<input type="time" class="form-control" id="editStartTime" name="startTime"
+												placeholder="HH/mm/ss">
+										</div>
+										<div class="form-group">
+											<label for="editEndTime">End Time</label>
+											<input type="time" class="form-control" id="editEndTime" name="endTime"
+												placeholder="HH/mm/ss">
+										</div>
+										<div class="form-group">
+											<label>Movies</label>
+											<select class="form-control" id="editMovies" name="movies.movieId">
+												<option th:each="movie : ${movies}" th:value="${movie.movieId}"
+													th:text="${movie.title}"
+													th:selected="${movie.movieId == selectedMovieId}">
+												</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label>ScreenId</label>
+											<select class="form-control" id="editScreens" name="screens.screenId">
+												<option th:each="screen : ${screens}" th:value="${screen.screenId}"
+													th:text="${screen.name}"
+													th:selected="${screen.screenId == selectedScreenId}">
+												</option>
+											</select>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Save Changes</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</body>
+
+</html>
+<script>
+	$(document).ready(function () {
+		$('.edit-movies-btn').click(function () {
+			var showtimeId = $(this).data('id');
+			var showDate = $(this).data('showdate');
+			var startDate = $(this).data('starttime');
+			var endDate = $(this).data('endtime');
+			var movieId = $(this).data('movie-id')
+			var screenId = $(this).data('screen-id')
+			$('#editShowtimeId').val(showtimeId);
+			$('#editShowDate').val(showDate);
+			$('#editStartTime').val(startDate);
+			$('#editEndTime').val(endDate);
+			$('#editMovies').val(movieId).trigger('change');
+			$('#editScreens').val(screenId).trigger('change');
+			console.log($("#editShowtimeId").val());
+			console.log($("#editShowDate").val());
+			console.log($("#editStartTime").val());
+			console.log($("#editEndTime").val());
+			console.log($("#editMovies").val());
+
+			$("#editShowtimeModal").modal("show");
+		});
+
+	});
+</script>

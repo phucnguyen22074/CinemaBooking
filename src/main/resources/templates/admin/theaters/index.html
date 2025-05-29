@@ -1,0 +1,320 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/admin :: mainContent('Theaters', ~{this :: .content-wrapper})}">
+
+<head>
+	<title>Theater Management</title>
+</head>
+
+<body>
+
+	<div class="content-wrapper">
+		<!-- Header -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-md-6">
+						<!-- Notification Box -->
+						<div id="notificationBox" th:if="${msg}"
+							th:classappend="${msgType == 'error' ? 'notification-box error' : 'notification-box success'}"
+							style="display: none;">
+							<span th:text="${msg}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Main Content -->
+		<section class="content">
+			<div class="container-fluid">
+				<div class="card">
+					<!-- Card Header -->
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title">Theaters Table</h3>
+						<div class="ml-auto">
+							<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addTheaterModal">
+								<i class="fas fa-plus"></i> Add Theater
+							</a>
+						</div>
+					</div>
+
+					<!-- Filter Form -->
+					<form th:action="@{/admin/theaters/filter}" method="get" class="p-3">
+						<div class="form-row align-items-end"> <!-- Thêm align-items-end để căn chỉnh các phần tử -->
+							<!-- Brand Filter -->
+							<div class="col-md-4 mb-3">
+								<label for="brandFilter" class="font-weight-bold text-secondary">Brand:</label>
+								<select id="brandFilter" name="brandId" class="form-control selectpicker"
+									data-live-search="true">
+									<option value="">All Brands</option>
+									<option th:each="brand : ${brands}" th:value="${brand.brandId}"
+										th:text="${brand.name}" th:selected="${brand.brandId == selectedBrandId}">
+									</option>
+								</select>
+							</div>
+
+							<!-- Location Filter -->
+							<div class="col-md-4 mb-3">
+								<label for="locationFilter" class="font-weight-bold text-secondary">Location:</label>
+								<select id="locationFilter" name="locationId" class="form-control selectpicker"
+									data-live-search="true">
+									<option value="">All Locations</option>
+									<option th:each="location : ${locations}" th:value="${location.locationId}"
+										th:text="${location.city}"
+										th:selected="${location.locationId == selectedLocationId}">
+									</option>
+								</select>
+							</div>
+
+							<!-- Filter Button -->
+							<div class="col-md-4 mb-3 d-flex align-items-end">
+								<!-- Căn chỉnh nút với các trường khác -->
+								<button type="submit" class="btn btn-primary w-70"><i class="fa fa-filter"></i>
+									Filter</button>
+							</div>
+						</div>
+					</form>
+
+					<!-- Table -->
+					<div class="card-body table-responsive p-0">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th>ID</th>
+									<th>Name</th>
+									<th>Address</th>
+									<th>Brand</th>
+									<th>Location</th>
+									<th class="text-center">Actions</th>
+									<th class="text-center">View Movies</th> <!-- Cột mới -->
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="theater : ${theaters}">
+									<td th:text="${theater.theaterId}"></td>
+									<td th:text="${theater.name}"></td>
+									<td th:text="${theater.address}" class="text-truncate" style="max-width: 200px;">
+									</td>
+									<td th:text="${theater.brands.name}"></td>
+									<td th:text="${theater.locations.city}"></td>
+									<td class="text-center">
+										<button class="btn btn-sm btn-warning edit-theater-btn" data-toggle="modal"
+											data-target="#editTheaterModal" th:data-theaterid="${theater.theaterId}"
+											th:data-name="${theater.name}" th:data-address="${theater.address}"
+											th:data-latitude="${theater.latitude}"
+											th:data-longitude="${theater.longitude}"
+											th:data-brandid="${theater.brands.brandId}"
+											th:data-locationid="${theater.locations.locationId}">
+											<i class="fa fa-edit"></i>
+										</button>
+										<a th:href="@{'/admin/theaters/delete/' + ${theater.theaterId}}"
+											class="btn btn-danger btn-sm">
+											<i class="fas fa-trash"></i>
+										</a>
+									</td>
+									<td class="text-center">
+										<a th:href="@{'/admin/theaters/' + ${theater.theaterId}} + '/movies'"
+											class="btn btn-info btn-sm">
+											<i class="fas fa-film"></i> View Movies
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer clearfix">
+						<div class="float-left">
+							<form th:action="@{/admin/theaters/index}" method="get" class="form-inline">
+								<label for="size">Show:</label>
+								<select name="size" id="size" onchange="this.form.submit()" class="form-control ml-2">
+									<option value="10" th:selected="${size == 10}">10</option>
+									<option value="20" th:selected="${size == 20}">20</option>
+									<option value="50" th:selected="${size == 50}">50</option>
+								</select>
+							</form>
+						</div>
+						<ul class="pagination pagination-sm m-0 float-right">
+							<!-- Previous Button -->
+							<li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+								<a th:href="@{/admin/theaters/filter(locationId=${selectedLocationId}, page=${currentPage - 1}, size=${size})}"
+									class="page-link">Previous</a>
+							</li>
+
+							<!-- Page Numbers -->
+							<li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+								th:class="${pageNumber == currentPage ? 'page-item active' : 'page-item'}">
+								<a th:href="@{/admin/theaters/filter(locationId=${selectedLocationId}, page=${pageNumber}, size=${size})}"
+									class="page-link" th:text="${pageNumber + 1}"></a>
+							</li>
+
+							<!-- Next Button -->
+							<li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
+								<a th:href="@{/admin/theaters/filter(locationId=${selectedLocationId}, page=${currentPage + 1}, size=${size})}"
+									class="page-link">Next</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Modal Add Theater -->
+		<div class="modal fade" id="addTheaterModal" tabindex="-1" aria-labelledby="addTheaterModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addTheaterModalLabel">Add Theater</h5>
+						<button type="button" class="close" data-dismiss="modal">
+							<span>&times;</span>
+						</button>
+					</div>
+
+					<form th:action="@{/admin/theaters/save}" method="post" th:object="${theater}">
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="theaterName">Name</label>
+								<input type="text" class="form-control" id="theaterName" th:field="*{name}" required>
+							</div>
+
+							<div class="form-group">
+								<label for="theaterAddress">Address</label>
+								<input type="text" class="form-control" id="theaterAddress" th:field="*{address}"
+									required>
+							</div>
+
+							<div class="form-row">
+								<div class="col">
+									<label for="latitude">Latitude</label>
+									<input type="number" step="any" class="form-control" id="latitude"
+										th:field="*{latitude}" required>
+								</div>
+								<div class="col">
+									<label for="longitude">Longitude</label>
+									<input type="number" step="any" class="form-control" id="longitude"
+										th:field="*{longitude}" required>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="theaterBrand">Brand</label>
+								<select id="theaterBrand" class="form-control" th:field="*{brands.brandId}" required>
+									<option value="">Select Brand</option>
+									<option th:each="brand : ${brands}" th:value="${brand.brandId}"
+										th:text="${brand.name}">
+									</option>
+								</select>
+							</div>
+
+							<div class="form-group">
+								<label for="theaterLocation">Location</label>
+								<select id="theaterLocation" class="form-control" th:field="*{locations.locationId}"
+									required>
+									<option value="">Select Location</option>
+									<option th:each="location : ${locations}" th:value="${location.locationId}"
+										th:text="${location.city}"></option>
+								</select>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="editTheaterModal" tabindex="-1" aria-labelledby="editTheaterModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="editTheaterModalLabel">Edit Theater</h5>
+						<button type="button" class="close" data-dismiss="modal">
+							<span>&times;</span>
+						</button>
+					</div>
+
+					<form th:action="@{/admin/theaters/edit}" method="post">
+						<div class="modal-body">
+							<input type="hidden" id="editTheaterId" name="theaterId">
+
+							<div class="form-group">
+								<label for="editTheaterName">Name</label>
+								<input type="text" class="form-control" id="editTheaterName" name="name" required>
+							</div>
+
+							<div class="form-group">
+								<label for="editTheaterAddress">Address</label>
+								<input type="text" class="form-control" id="editTheaterAddress" name="address" required>
+							</div>
+
+							<div class="form-row">
+								<div class="col">
+									<label for="editLatitude">Latitude</label>
+									<input type="number" step="any" class="form-control" id="editLatitude"
+										name="latitude" required>
+								</div>
+								<div class="col">
+									<label for="editLongitude">Longitude</label>
+									<input type="number" step="any" class="form-control" id="editLongitude"
+										name="longitude" required>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="editTheaterBrand">Brand</label>
+								<select id="editTheaterBrand" class="form-control" name="brands.brandId" required>
+									<option value="">-- Select Brand --</option>
+									<option th:each="brand : ${brands}" th:value="${brand.brandId}"
+										th:text="${brand.name}">
+									</option>
+								</select>
+							</div>
+
+							<div class="form-group">
+								<label for="editTheaterLocation">Location</label>
+								<select id="editTheaterLocation" class="form-control" name="locations.locationId"
+									required>
+									<option th:each="location : ${locations}" th:value="${location.locationId}"
+										th:text="${location.city}"></option>
+								</select>
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save Changes</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+
+</html>
+<script>
+	$(document).ready(function () {
+		$('.edit-theater-btn').on('click', function () {
+			var theaterId = $(this).data('theaterid');
+			var name = $(this).data('name');
+			var address = $(this).data('address');
+			var latitude = $(this).data('latitude');
+			var longitude = $(this).data('longitude');
+			var brandId = $(this).data('brandid');
+			var locationId = $(this).data('locationid');
+
+			$('#editTheaterId').val(theaterId);
+			$('#editTheaterName').val(name);
+			$('#editTheaterAddress').val(address);
+			$('#editLatitude').val(latitude);
+			$('#editLongitude').val(longitude);
+			$('#editTheaterBrand').val(brandId);
+			$('#editTheaterLocation').val(locationId);
+		});
+	});
+
+</script>

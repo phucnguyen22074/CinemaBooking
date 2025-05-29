@@ -1,0 +1,187 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/admin :: mainContent('Screens', ~{this :: .content-wrapper})}">
+
+<head>
+	<title>Screens Management</title>
+	<!-- Nếu bạn đã có CSS riêng, giữ nguyên link -->
+</head>
+
+<body>
+	<div class="content-wrapper">
+		<!-- Header -->
+		<!-- Main Content -->
+		<section class="content">
+			<div class="container-fluid">
+				<div class="card">
+					<!-- Seat Grid -->
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title" th:text="${nameScreen}"></h3>
+					</div>
+					<div class="card-body">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th>Seat Number</th>
+									<th>Status</th>
+									<th>Price (VNĐ)</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="seat : ${seatsList}">
+									<td th:text="${seat.seatNumber}"></td>
+									<td th:classappend="${seat.status == 0 ? 'text-success' : 
+                                                         (seat.status == 1 ? 'text-primary' : 
+                                                         (seat.status == 2 ? 'text-warning' : 'text-danger'))}"
+										th:text="${seat.status == 0 ? 'Available' : 
+                                                  (seat.status == 1 ? 'Booked' : 
+                                                  (seat.status == 2 ? 'Repair' : 'Disabled'))}">
+									</td>
+									<td th:text="${seat.price} + ' VNĐ'"></td>
+									<td>
+										<a class="btn btn-sm btn-warning edit-seat-btn" data-toggle="modal"
+											data-target="#editSeatModal" th:data-id="${seat.seatId}"
+											th:data-seatnumber="${seat.seatNumber}" th:data-price="${seat.price}"
+											th:data-status="${seat.status}"><i class="fas fa-edit"></i>Edit
+										</a>
+										<a class="btn btn-sm btn-info view-booking-btn" data-toggle="modal"
+											data-target="#viewBookingModal" th:data-seatid="${seat.seatId}">
+											Booking Details
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- Modal for Editing Seats -->
+					<div class="modal fade" id="editSeatModal" tabindex="-1" role="dialog"
+						aria-labelledby="editSeatModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="editSeatModalLabel">Edit Seat</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<!-- Form Edit -->
+									<form th:action="@{'/admin/screens/' + ${screen.screenId} + '/seats/edit'}"
+										method="post">
+										<input type="hidden" name="seatId" id="editSeatId" />
+										<div class="form-group">
+											<label for="editSeatNumber">Seat Number</label>
+											<input type="text" class="form-control" id="editSeatNumber"
+												name="seatNumber" required />
+										</div>
+										<div class="form-group">
+											<label for="editStatus">Status</label>
+											<select class="form-control" id="editStatus" name="status">
+												<option value="0">Available</option>
+												<option value="1">Booked</option>
+												<option value="2">Repair</option>
+												<option value="3">Disabled</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label for="editPrice">Price</label>
+											<input type="number" class="form-control" id="editPrice" name="price"
+												step="0.01" required />
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary"
+												data-dismiss="modal">Cancel</button>
+											<button type="submit" class="btn btn-primary">Save Changes</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal for Viewing Booking Details -->
+					<div class="modal fade" id="viewBookingModal" tabindex="-1" role="dialog"
+						aria-labelledby="viewBookingModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="viewBookingModalLabel">Booking Details</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<div id="booking-details">
+										<!-- Content will be dynamically loaded here -->
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+
+</body>
+
+</html>
+<script>
+	$(document).ready(function () {
+		$('.edit-seat-btn').on('click', function () {
+			var seatId = $(this).data('id');
+			var seatNumber = $(this).data('seatnumber');
+			var status = $(this).data('status');
+			var price = $(this).data('price');
+
+			$('#editSeatId').val(seatId);
+			$('#editSeatNumber').val(seatNumber);
+			$('#editStatus').val(status);
+			$('#editPrice').val(price);
+
+			$('#editSeatModal').modal('show');
+		});
+	});
+	$(document).ready(function () {
+		$(document).on('click', '.view-booking-btn', function () {
+			var seatId = $(this).data('seatid');
+			$.ajax({
+				url: '/admin/screens/seats/' + seatId + '/booking',
+				method: 'GET',
+				success: function (response) {
+					if (response.message) {
+						$('#booking-details').html('<p>' + response.message + '</p>');
+					} else {
+						var content = `
+	                        <p><strong>Booking ID:</strong> ${response.bookingId}</p>
+	                        <p><strong>User:</strong> ${response.user}</p>
+	                        <p><strong>Booking Date:</strong> ${new Date(response.bookingDate).toLocaleString()}</p>
+	                        <p><strong>Total Price:</strong> ${response.totalPrice} VNĐ</p>
+	                        <p><strong>Seat Number:</strong> ${response.seatNumber}</p>
+	                        <p><strong>Status:</strong> ${getStatusText(response.status)}</p>
+	                    `;
+						$('#booking-details').html(content);
+					}
+					$('#viewBookingModal').modal('show');
+				},
+				error: function () {
+					$('#booking-details').html('<p>Error fetching booking details.</p>');
+					$('#viewBookingModal').modal('show');
+				}
+			});
+		});
+
+		// Hàm chuyển đổi trạng thái số thành văn bản
+		function getStatusText(status) {
+			switch (status) {
+				case 0: return 'Available';
+				case 1: return 'Booked';
+				case 2: return 'Repair';
+				case 3: return 'Disabled';
+				default: return 'Unknown';
+			}
+		}
+	});
+</script>

@@ -1,0 +1,210 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/admin :: mainContent('locations', ~{this :: .content-wrapper})}">
+
+<head>
+	<title>location Management</title>
+</head>
+
+<body>
+
+	<div class="content-wrapper">
+		<!-- Header -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-md-6">
+						<!-- Notification Box -->
+						<div id="notificationBox" th:if="${msg}"
+							th:classappend="${msgType == 'error' ? 'notification-box error' : 'notification-box success'}"
+							style="display: none;">
+							<span th:text="${msg}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Main Content -->
+		<section class="content">
+			<div class="container-fluid">
+				<div class="card">
+					<!-- Card Header -->
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title">locations Table</h3>
+						<div class="ml-auto">
+							<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addlocationModal">
+								<i class="fas fa-plus"></i> Add location
+							</a>
+						</div>
+					</div>
+
+					<!-- Filter Form -->
+					<form th:action="@{/admin/locations/filter}" method="get" class="p-3">
+						<div class="form-row align-items-end"> <!-- Căn chỉnh các phần tử -->
+							<!-- location Filter -->
+							<div class="col-md-4">
+								<label for="locationFilter">Filter by Location</label>
+								<select id="locationFilter" name="locationId" 
+									class="form-control">
+									<option value="">All Locations</option>
+									<option th:each="location : ${allLocations}" th:value="${location.locationId}"
+										th:selected="${location.locationId == selectedLocationId}"
+										th:text="${location.city}">
+									</option>
+								</select>
+							</div>
+							<!-- Filter Button -->
+							<div class="col-md-4">
+								<button type="submit" class="btn btn-primary w-70">
+									<i class="fa fa-filter"></i> Filter
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- Table -->
+					<div class="card-body table-responsive p-0">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th>ID</th>
+									<th>Name Cities</th>
+									<th class="text-center">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="location : ${locations}">
+									<td th:text="${location.locationId}"></td>
+									<td th:text="${location.city}"></td>
+									<td class="text-center">
+										<a href="#" data-toggle="modal" data-target="#editLocationModal"
+											class="btn btn-warning btn-sm mr-2 edit-location"
+											th:data-location-id="${location.locationId}"
+											th:data-city="${location.city}">
+											<i class="fas fa-edit"></i>Edit
+										</a>
+										<a th:href="@{'/admin/locations/delete/' + ${location.locationId}}"
+											class="btn btn-danger btn-sm">
+											<i class="fas fa-trash"></i>Delete
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+
+					</div>
+					<div class="card-footer clearfix">
+						<div class="float-left">
+							<form th:action="@{/admin/locations/index}" method="get" class="form-inline">
+								<label for="size">Show:</label>
+								<select name="size" id="size" onchange="this.form.submit()" class="form-control ml-2">
+									<option value="10" th:selected="${size == 10}">10</option>
+									<option value="20" th:selected="${size == 20}">20</option>
+									<option value="50" th:selected="${size == 50}">50</option>
+								</select>
+							</form>
+						</div>
+						<ul class="pagination pagination-sm m-0 float-right">
+							<!-- Previous Button -->
+							<li th:class="${currentPage == 0 ? 'page-item disabled' : 'page-item'}">
+								<a th:href="@{/admin/locations/filter(locationId=${selectedLocationId}, page=${currentPage - 1}, size=${size})}"
+									class="page-link">Previous</a>
+							</li>
+
+							<!-- Page Numbers -->
+							<li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+								th:class="${pageNumber == currentPage ? 'page-item active' : 'page-item'}">
+								<a th:href="@{/admin/locations/filter(locationId=${selectedLocationId}, page=${pageNumber}, size=${size})}"
+									class="page-link" th:text="${pageNumber + 1}"></a>
+							</li>
+
+							<!-- Next Button -->
+							<li th:class="${currentPage == totalPages - 1 ? 'page-item disabled' : 'page-item'}">
+								<a th:href="@{/admin/locations/filter(locationId=${selectedLocationId}, page=${currentPage + 1}, size=${size})}"
+									class="page-link">Next</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+		</section>
+		<!-- Pagination -->
+
+
+		<!-- Modal Add location -->
+		<div class="modal fade" id="addlocationModal" tabindex="-1" aria-labelledby="addlocationModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addlocationModalLabel">Add location</h5>
+						<button type="button" class="close" data-dismiss="modal">
+							<span>&times;</span>
+						</button>
+					</div>
+
+					<form th:action="@{/admin/locations/save}" method="post" th:object="${location}">
+						<div class="modal-body">
+							<!-- Name Field -->
+							<div class="form-group">
+								<label for="locationName">Name City</label>
+								<input type="text" class="form-control" id="locationName" th:field="*{city}" required>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!--Modal Edit -->
+		<div class="modal fade" id="editLocationModal" tabindex="-1" aria-labelledby="editLocationModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="editLocationModalLabel">Edit Location</h5>
+						<button type="button" class="close" data-dismiss="modal">
+							<span>&times;</span>
+						</button>
+					</div>
+
+					<form id="editLocationForm" th:action="@{/admin/locations/edit}" method="post">
+						<!-- Hidden Input for Location ID -->
+						<input type="hidden" name="id" id="editLocationId" />
+
+						<div class="modal-body">
+							<!-- Name Field -->
+							<div class="form-group">
+								<label for="editLocationName">Name City</label>
+								<input type="text" class="form-control" id="editLocationName" name="city" required />
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save Changes</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+
+</html>
+
+<script>
+	$(document).on("click", ".edit-location", function () {
+		// Lấy dữ liệu từ thuộc tính data
+		const locationId = $(this).data("locationId");
+		const city = $(this).data("city");
+
+		// Điền dữ liệu vào form
+		$("#editLocationModal input[name='id']").val(locationId); // Điền locationId
+		$("#editLocationModal input[name='city']").val(city);     // Điền city
+	});
+</script>

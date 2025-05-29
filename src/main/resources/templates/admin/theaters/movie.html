@@ -1,0 +1,665 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/admin :: mainContent('Movie', ~{this :: .content-wrapper})}">
+
+<body>
+	<div class="content-wrapper">
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-md-6">
+						<!-- Notification Box -->
+						<div id="notificationBox" th:if="${msg}"
+							th:classappend="${msgType == 'error' ? 'notification-box error' : 'notification-box success'}"
+							style="display: none;">
+							<span th:text="${msg}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="content">
+			<div class="container-fluid">
+				<div class="card">
+					<!-- Card Header -->
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title">Movies Table</h3>
+						<div class="ml-auto">
+							<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addMovieModal"
+								th:if="${isMoviesController}">
+								<i class="fas fa-plus"></i> Add Movie
+							</a>
+						</div>
+					</div>
+					<!-- Nút Filter -->
+					<div class="text-left mb-3" style="margin-top: 10px;">
+						<button id="toggleFilterButton" class="btn btn-secondary">
+							<i class="fa fa-filter"></i> Show Filter
+						</button>
+					</div>
+					<!-- Form lọc (ẩn ban đầu) -->
+					<div id="filterFormContainer" style="display: none;" th:if="${isTheatersController}">
+						<form th:action="@{'/admin/theaters/' + ${theaterId} + '/movies/filter'}" method="get"
+							class="p-3 filter-form">
+							<div class="form-row align-items-end">
+								<!-- Title Filter -->
+								<div class="col-md-4 filter-item">
+									<label><strong>Title:</strong></label>
+									<input type="text" name="keyword" class="form-control"
+										placeholder="Search by movie title..." />
+								</div>
+								<div class="col-md-4 filter-item">
+									<label><strong>Genre:</strong></label>
+									<select name="genreId" id="genreFilter" class="form-control">
+										<option value="">All genres</option>
+										<option th:each="genre : ${allGenres}" th:value="${genre.genreId}"
+											th:text="${genre.name}" th:selected="${genre.genreId == selectedGenreId}">
+										</option>
+									</select>
+								</div>
+
+								<div class="col-md-4 filter-item">
+									<label><strong>Status:</strong></label>
+									<select name="status" class="form-control">
+										<option value="">All status</option>
+										<option value="true">Showing</option>
+										<option value="false">Upcoming</option>
+									</select>
+								</div>
+								<div class="col-md-4 filter-item">
+									<label><strong>Duration:</strong></label>
+									<select name="durationRange" class="form-control">
+										<option value="">All durations</option>
+										<option value="short"
+											th:selected="${minDuration != null && minDuration == 90 }">Short (< 90
+												minutes)</option>
+										<option value="medium" th:selected="${minDuration != null && minDuration == 90
+											 && maxDuration != null && maxDuration ==120}">Medium (90 -120 minutes)</option>
+										<option value="long" th:selected="${maxDuration != null && maxDuration ==120}">
+											Long (> 120 minutes)</option>
+									</select>
+								</div>
+								<!-- Release Date Filter -->
+								<div class="col-md-4 filter-item">
+									<label><strong>Release Year:</strong></label>
+									<select name="releaseYear" class="form-control">
+										<option value="">All years</option>
+										<option
+											th:each="year : ${#numbers.sequence(2000, #dates.year(#dates.createNow()))}"
+											th:value="${year}" th:text="${year}"></option>
+									</select>
+								</div>
+								<div class="col-md-4 filter-item">
+									<label><strong>Rating:</strong></label>
+									<select name="rating" class="form-control">
+										<option value="">All ratings</option>
+										<option value="high">High (>= 4.0)</option>
+										<option value="medium">Medium (3.0-4.0)</option>
+										<option value="low">Low (< 3.0)</option>
+									</select>
+								</div>
+								<!-- Submit Button -->
+								<div class="col-md-12 text-right mt-3">
+									<button type="submit" class="btn btn-primary">
+										<i class="fa fa-filter"></i> Apply Filter
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+
+
+					<div id="filterFormContainer" style="display: none;" th:if="${isMoviesController}">
+						<form th:action="@{/admin/movies/filter}" method="get" class="p-3 filter-form">
+							<div class="form-row align-items-end">
+								<!-- Title Filter -->
+								<div class="col-md-4 filter-item">
+									<label><strong>Title:</strong></label>
+									<input type="text" name="keyword" class="form-control"
+										placeholder="Search by movie title..." />
+								</div>
+								<div class="col-md-4 filter-item">
+									<label><strong>Genre:</strong></label>
+									<select name="genreId" id="genreFilter" class="form-control">
+										<option value="">All genres</option>
+										<option th:each="genre : ${allGenres}" th:value="${genre.genreId}"
+											th:text="${genre.name}" th:selected="${genre.genreId == selectedGenreId}">
+										</option>
+									</select>
+								</div>
+
+								<div class="col-md-4 filter-item">
+									<label><strong>Status:</strong></label>
+									<select name="status" class="form-control">
+										<option value="">All status</option>
+										<option value="true">Showing</option>
+										<option value="false">Upcoming</option>
+									</select>
+								</div>
+								<div class="col-md-4 filter-item">
+									<label><strong>Duration:</strong></label>
+									<select name="durationRange" class="form-control">
+										<option value="">All durations</option>
+										<option value="short"
+											th:selected="${minDuration != null && minDuration == 90 }">Short (< 90
+												minutes)</option>
+										<option value="medium" th:selected="${minDuration != null && minDuration == 90
+																 && maxDuration != null && maxDuration ==120}">Medium (90 -120 minutes)</option>
+										<option value="long" th:selected="${maxDuration != null && maxDuration ==120}">
+											Long (> 120 minutes)</option>
+									</select>
+								</div>
+								<!-- Release Date Filter -->
+								<div class="col-md-4 filter-item">
+									<label><strong>Release Year:</strong></label>
+									<select name="releaseYear" class="form-control">
+										<option value="">All years</option>
+										<option
+											th:each="year : ${#numbers.sequence(2000, #dates.year(#dates.createNow()))}"
+											th:value="${year}" th:text="${year}"></option>
+									</select>
+								</div>
+								<div class="col-md-4 filter-item">
+									<label><strong>Rating:</strong></label>
+									<select name="rating" class="form-control">
+										<option value="">All ratings</option>
+										<option value="high">High (>= 4.0)</option>
+										<option value="medium">Medium (3.0-4.0)</option>
+										<option value="low">Low (< 3.0)</option>
+									</select>
+								</div>
+								<!-- Submit Button -->
+								<div class="col-md-12 text-right mt-3">
+									<button type="submit" class="btn btn-primary">
+										<i class="fa fa-filter"></i> Apply Filter
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+					<!-- Table -->
+					<div class="card-body table-responsive p-0">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th style="width: 5%;">ID</th>
+									<th style="width: 13%;">Title</th>
+									<th style="width: 10%;">Image</th>
+									<th style="width: 15%;">Description</th>
+									<th style="width: 12%;">Genre</th>
+									<th style="width: 12%;">Trailer</th>
+									<th style="width: 8%;">Duration</th>
+									<th style="width: 11%;">Release Date</th>
+									<th style="width: 9%;">Rating</th>
+									<th style="width: 8%;">Status</th>
+									<th th:if="${isMoviesController}" style="width: 10%; text-align: center;">Action
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="movie : ${movies}">
+									<td th:text="${movie.movieId}"></td>
+									<td th:text="${movie.title}"></td>
+									<td>
+										<img th:src="@{'/assets/photo/' + ${movie.imageUrl}}" alt="Movie Image"
+											width="80" height="80" />
+									</td>
+									<td>
+										<span th:utext="${#strings.abbreviate(movie.description, 50)}"></span>
+										<button class="btn btn-link view-more-btn" data-toggle="modal"
+											data-target="#descriptionModal" th:data-movieid="${movie.movieId}"
+											th:data-description="${movie.description}">
+											View More
+										</button>
+									</td>
+									<td>
+										<span th:each="genre, iterStat : ${movie.genreses}">
+											<span th:text="${genre.name} + (iterStat.last ? '' : ', ')"></span>
+										</span>
+									</td>
+									<td class="video-cell">
+										<div class="video-container">
+											<iframe th:src="@{'https://www.youtube.com/embed/' + ${movie.trailerUrl}}"
+												frameborder="0"
+												allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+												allowfullscreen>
+											</iframe>
+										</div>
+									</td>
+									<td>
+										<span th:if="${movie.duration != null}">
+											<span
+												th:text="${#numbers.formatInteger(movie.duration / 60, 0)} + 'h '"></span>
+											<span
+												th:text="${#numbers.formatInteger(movie.duration % 60, 0)} + 'm'"></span>
+										</span>
+										<span th:if="${movie.duration == null}">N/A</span>
+									</td>
+									<td th:text="${#dates.format(movie.releaseDate, 'dd/MM/yyyy')}"></td>
+									<td>
+										<span th:if="${movie.rating != null}">
+											<span th:each="i : ${#numbers.sequence(1, movie.rating.intValue())}">
+												<i class="fas fa-star" style="color: gold;"></i>
+											</span>
+											<span th:if="${movie.rating - movie.rating.intValue() > 0}">
+												<i class="fas fa-star-half-alt" style="color: gold;"></i>
+											</span>
+											<span th:text="' (' + ${movie.rating} + ')'"
+												style="font-size: 0.9em; color: #666;"></span>
+										</span>
+										<span th:if="${movie.rating == null}">N/A</span>
+									</td>
+									<td>
+										<span class="badge"
+											th:classappend="${movie.status} ? 'badge-success' : 'badge-danger'"
+											th:text="${movie.status} ? 'Showing' : 'UpComing'"></span>
+									</td>
+									<td th:if="${isMoviesController}">
+										<a href="#" class="btn btn-warning btn-sm edit-movie-btn" data-toggle="modal"
+											data-target="#editMovieModal" th:data-movieid="${movie.movieId}"
+											th:data-title="${movie.title}" th:data-imageurl="${movie.imageUrl}"
+											th:data-description="${movie.description}"
+											th:data-genreids="${movie.genreses.![genreId]}"
+											th:data-trailerurl="${movie.trailerUrl}"
+											th:data-duration="${movie.duration}"
+											th:data-releaseDate="${#dates.format(movie.releaseDate, 'dd/MM/yyyy')}"
+											th:data-rating="${movie.rating}" th:data-actorids="${movie.actors.![id]}"
+											th:data-directorids="${movie.directors.![id]}"
+											th:data-theaterids="${movie.theaterses.![theaterId]}">
+											<i class="fas fa-edit"></i>
+										</a>
+										<a th:href="@{'/admin/movies/delete/' + ${movie.movieId}}"
+											class="btn btn-danger btn-sm">
+											<i class="fas fa-trash"></i>
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<!-- Form Add Movie Modal -->
+					<div class="modal fade" id="addMovieModal" tabindex="-1" aria-labelledby="addMovieModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog modal-lg"> <!-- Thêm modal-lg để tăng kích thước modal -->
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="addMovieModalLabel">Add Movie</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<form th:action="@{/admin/movies/save}" method="post" th:object="${movie}"
+									enctype="multipart/form-data">
+									<div class="modal-body">
+										<div class="row">
+											<!-- Title -->
+											<div class="col-md-6 form-group">
+												<label for="title">Title</label>
+												<input type="text" class="form-control" id="title" th:field="*{title}"
+													required>
+											</div>
+											<!-- Duration -->
+											<div class="col-md-6 form-group">
+												<label for="duration">Duration (minutes)</label>
+												<input type="number" class="form-control" id="duration"
+													th:field="*{duration}" min="1" required>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Description -->
+											<div class="col-md-12 form-group">
+												<label for="description">Description</label>
+												<textarea class="form-control" id="description"
+													th:field="*{description}" rows="3" required></textarea>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Release Date -->
+											<div class="col-md-6 form-group">
+												<label for="releaseDate">Release Date</label>
+												<input type="text" class="form-control" id="releaseDate"
+													placeholder="dd/MM/yyyy" th:field="*{releaseDate}" required>
+											</div>
+											<!-- Status -->
+											<div class="col-md-6 form-group">
+												<label for="status">Status</label>
+												<select class="form-control" id="status" th:field="*{status}" required>
+													<option value="true">Showing</option>
+													<option value="false">Upcoming</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Image URL -->
+											<div class="col-md-6 form-group">
+												<label for="movieImage">Image</label>
+												<input type="file" class="form-control-file" id="movieImage" name="file"
+													required>
+											</div>
+											<!-- Trailer URL -->
+											<div class="col-md-6 form-group">
+												<label for="trailerUrl">Trailer ID (YouTube)</label>
+												<input type="text" class="form-control" id="trailerUrl"
+													th:field="*{trailerUrl}"
+													placeholder="Enter YouTube Video ID (e.g., dQw4w9WgXcQ)" required>
+												<small class="form-text text-muted">
+													Example: For the URL
+													<code>https://www.youtube.com/watch?v=dQw4w9WgXcQ</code>, enter
+													<code>dQw4w9WgXcQ</code>.
+												</small>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Rating -->
+											<div class="col-md-6 form-group">
+												<label for="rating">Rating</label>
+												<input type="number" class="form-control" id="rating"
+													th:field="*{rating}" step="0.1" min="1" max="5">
+											</div>
+											<!-- Actors -->
+											<div class="col-md-6 form-group">
+												<label for="actors">Actors</label>
+												<select id="actors" class="form-control" name="actorIds" required>
+													<option value="">Select Actors</option>
+													<option th:each="actor : ${allActors}" th:value="${actor.id}"
+														th:text="${actor.name}"></option>
+												</select>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Directors -->
+											<div class="col-md-6 form-group">
+												<label for="directors">Directors</label>
+												<select id="directors" class="form-control" name="directorIds" required>
+													<option value="">Select Directors</option>
+													<option th:each="director : ${allDirectors}"
+														th:value="${director.id}" th:text="${director.name}"></option>
+												</select>
+											</div>
+											<!-- Genres -->
+											<div class="col-md-6 form-group">
+												<label for="genres">Genres</label>
+												<select id="genres" class="form-control" name="genreIds" multiple
+													required>
+													<option value="">Select Genres</option>
+													<option th:each="genre : ${allGenres}" th:value="${genre.genreId}"
+														th:text="${genre.name}"></option>
+												</select>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Theaters -->
+											<div class="col-md-12 form-group">
+												<label for="theaters">Theaters</label>
+												<select id="theaters" class="form-control" name="theaterIds" required>
+													<option value="">Select Theaters</option>
+													<option th:each="theater : ${allTheaters}"
+														th:value="${theater.theaterId}" th:text="${theater.name}">
+													</option>
+												</select>
+											</div>
+										</div>
+									</div>
+
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Save</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					<!-- Form Edit Movie Modal -->
+					<!-- Modal Edit Movie -->
+					<div class="modal fade" id="editMovieModal" tabindex="-1" aria-labelledby="editMovieModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="editMovieModalLabel">Edit Movie</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<form th:action="@{/admin/movies/edit}" id="editMovieForm" method="post"
+									enctype="multipart/form-data">
+									<div class="modal-body">
+										<!-- Hidden field for movieId -->
+										<input type="hidden" name="movieId" ID="movieId" th:value="${movie.movieId}" />
+
+										<div class="row">
+											<!-- Title -->
+											<div class="col-md-6 form-group">
+												<label for="title" class="form-label">Title</label>
+												<input type="text" class="form-control" id="title" name="title"
+													th:value="${movie.title}" placeholder="Enter movie title" required>
+											</div>
+
+											<!-- Duration -->
+											<div class="col-md-6 form-group">
+												<label for="duration" class="form-label">Duration (minutes)</label>
+												<input type="number" class="form-control" id="duration" name="duration"
+													th:value="${movie.duration}" min="1"
+													placeholder="Enter duration in minutes" required>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Description -->
+											<div class="col-md-12 form-group">
+												<label for="description" class="form-label">Description</label>
+												<textarea class="form-control" id="description" name="description"
+													rows="3" placeholder="Enter movie description" required
+													th:text="${movie.description}"></textarea>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Image -->
+											<div class="col-md-6 form-group">
+												<label for="movieImage" class="form-label">Image</label>
+												<input type="file" class="form-control" id="movieImage" name="file">
+												<!-- Hiển thị hình ảnh hiện tại nếu có -->
+												<img th:if="${movie.imageUrl}" th:src="@{${movie.imageUrl}}"
+													alt="Movie Image" class="img-thumbnail mt-2"
+													style="max-width: 150px;">
+											</div>
+
+											<!-- Trailer ID -->
+											<div class="col-md-6 form-group">
+												<label for="trailerUrl" class="form-label">Trailer ID (YouTube)</label>
+												<input type="text" class="form-control" id="trailerUrl"
+													name="trailerUrl" th:value="${movie.trailerUrl}"
+													placeholder="Enter YouTube Video ID (e.g., dQw4w9WgXcQ)" required>
+												<small class="form-text text-muted">
+													Example: For the URL
+													<code>https://www.youtube.com/watch?v=dQw4w9WgXcQ</code>, enter
+													<code>dQw4w9WgXcQ</code>.
+												</small>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Release Date -->
+											<div class="col-md-6 form-group">
+												<label for="releaseDate" class="form-label">Release Date</label>
+												<input type="text" class="form-control datepicker" id="releaseDate"
+													name="releaseDate"
+													th:value="${#dates.format(movie.releaseDate, 'dd/MM/yyyy')}"
+													data-date-format="dd/mm/yyyy" required>
+											</div>
+
+											<!-- Status -->
+											<div class="col-md-6 form-group">
+												<label for="status" class="form-label">Status</label>
+												<select class="form-control" id="status" name="status" required>
+													<option value="true" th:selected="${movie.status} == true">Active
+													</option>
+													<option value="false" th:selected="${movie.status} == false">
+														Inactive</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Rating -->
+											<div class="col-md-6 form-group">
+												<label for="rating" class="form-label">Rating</label>
+												<input type="number" class="form-control" id="rating" name="rating"
+													step="0.1" min="0" max="5" th:value="${movie.rating}"
+													placeholder="Enter rating (0-5)">
+											</div>
+
+											<!-- Genres -->
+											<div class="col-md-6 form-group">
+												<label for="genreIds" class="form-label">Genres</label>
+												<select class="form-control" id="genreIds" name="genreIds" multiple
+													required>
+													<option value="">Select Genres</option>
+													<option th:each="genre : ${allGenres}" th:value="${genre.genreId}"
+														th:text="${genre.name}"
+														th:selected="${movie.genreses != null and movie.genreses.contains(genre)}">
+													</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Actors -->
+											<div class="col-md-6 form-group">
+												<label for="actorIds" class="form-label">Actors</label>
+												<select class="form-control" id="actorIds" name="actorIds" multiple
+													required>
+													<option value="">Select Actors</option>
+													<option th:each="actor : ${allActors}" th:value="${actor.id}"
+														th:text="${actor.name}"
+														th:selected="${movie.actors != null and movie.actors.contains(actor)}">
+													</option>
+												</select>
+											</div>
+
+											<!-- Directors -->
+											<div class="col-md-6 form-group">
+												<label for="directorIds" class="form-label">Directors</label>
+												<select class="form-control" id="directorIds" name="directorIds"
+													multiple required>
+													<option value="">Select Directors</option>
+													<option th:each="director : ${allDirectors}"
+														th:value="${director.id}" th:text="${director.name}"
+														th:selected="${movie.directors != null and movie.directors.contains(director)}">
+													</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- Theaters -->
+											<div class="col-md-12 form-group">
+												<label for="theaterIds" class="form-label">Theaters</label>
+												<select class="form-control" id="theaterIds" name="theaterIds" multiple
+													required>
+													<option value="">Select Theaters</option>
+													<option th:each="theater : ${allTheaters}"
+														th:value="${theater.theaterId}" th:text="${theater.name}"
+														th:selected="${movie.theaterses != null and movie.theaterses.contains(theater)}">
+													</option>
+												</select>
+											</div>
+										</div>
+									</div>
+
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Save changes</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal để xem thêm mô tả -->
+					<div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="descriptionModalLabel">Movie Description</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<!-- Nội dung mô tả đầy đủ sẽ được hiển thị ở đây -->
+									<p id="fullDescription"></p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</body>
+
+</html>
+<script>
+	$(document).ready(function () {
+		$('.edit-movie-btn').on('click', function () {
+			// Lấy các giá trị từ data attributes của nút Edit
+			var movieId = $(this).data('movieid');
+			var title = $(this).data('title');
+			var imageUrl = $(this).data('imageurl');
+			var description = $(this).data('description');
+			var genreIds = $(this).data('genreids');
+			var trailerUrl = $(this).data('trailerurl');
+			var duration = $(this).data('duration');
+			var releaseDate = $(this).data('releasedate');
+			var rating = $(this).data('rating');
+			var actorIds = $(this).data('actorids');
+			var directorIds = $(this).data('directorids');
+			var theaterIds = $(this).data('theaterids');
+
+			// Gán các giá trị vào các trường trong modal form
+			$('#editMovieModal input[name="movieId"]').val(movieId);
+			$('#editMovieModal input[name="title"]').val(title);
+			$('#editMovieModal input[name="imageUrl"]').val(imageUrl);
+			$('#editMovieModal textarea[name="description"]').val(description);
+			$('#editMovieModal input[name="trailerUrl"]').val(trailerUrl);
+			$('#editMovieModal input[name="duration"]').val(duration);
+			$('#editMovieModal input[name="releaseDate"]').val(releaseDate);
+			$('#editMovieModal input[name="rating"]').val(rating);
+
+			// Xử lý các trường select (genres, actors, directors, theaters)
+			$('#editMovieModal select[name="actorIds"]').val(actorIds).change();
+			$('#editMovieModal select[name="directorIds"]').val(directorIds).change();
+			$('#editMovieModal select[name="genreIds"]').val(genreIds).change();
+			$('#editMovieModal select[name="theaterIds"]').val(theaterIds).change();
+		});
+	});
+	$(document).ready(function () {
+		// Xử lý sự kiện khi nhấp vào nút "Xem thêm"
+		$('.view-more-btn').on('click', function () {
+			// Lấy movieId và description từ data attributes của nút
+			var movieId = $(this).data('movieid');
+			var fullDescription = $(this).data('description');
+
+			// Hiển thị mô tả đầy đủ trong modal
+			$('#fullDescription').text(fullDescription);
+
+			// Mở modal
+			$('#descriptionModal').modal('show');
+		});
+	});
+
+</script>

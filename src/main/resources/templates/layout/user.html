@@ -1,0 +1,418 @@
+<!DOCTYPE HTML>
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+    th:fragment="mainContent(title, content)">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Moviepoint - Online Movie, Video and TV Show HTML Template</title>
+    <!-- Favicon Icon -->
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favcion.png}" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap.min.css}" media="all" />
+    <!-- Slick nav CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/slicknav.min.css}" media="all" />
+    <!-- Iconfont CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/icofont.css}" media="all" />
+    <!-- Owl carousel CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/owl.carousel.css}">
+    <!-- Popup CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/magnific-popup.css}">
+    <!-- Main style CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/style.css}" media="all" />
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/responsive.css}" media="all" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/IcoFont/1.0.1/css/icofont.min.css" rel="stylesheet">
+
+    <style>
+        /* CSS for search button */
+        .search-btn {
+            background: #eb315a;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .search-btn:hover {
+            background: #fece50;
+        }
+        .search-btn i {
+            font-size: 18px;
+        }
+
+        /* CSS for dialog */
+        .search-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #24262d;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            width: 90%;
+            max-width: 900px;
+        }
+        .search-dialog.active {
+            display: block;
+        }
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            background: #1c1e24;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .theme-select, .theme-input {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #2c2e34;
+            color: #fff;
+            font-size: 14px;
+        }
+        .theme-select option {
+            background: #2c2e34;
+            color: #fff;
+        }
+        .search-form button[type="submit"] {
+            background: #eb315a;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .search-form button[type="submit"]:hover {
+            background: #fece50;
+        }
+        .close-dialog {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #fece50;
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        }
+        .overlay.active {
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .search-dialog {
+                width: 95%;
+                padding: 10px;
+            }
+            .search-form {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .theme-select, .theme-input {
+                min-width: 100%;
+            }
+        }
+    </style>
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <!-- Page loader -->
+    <div id="preloader"></div>
+    <!-- header section start -->
+    <header class="header">
+        <div class="container">
+            <div class="header-area">
+                <div class="logo">
+                    <a th:href="@{/home/index}"><img th:src="@{/assets/img/logo.png}" alt="logo" /></a>
+                </div>
+                <div class="header-right">
+                    <button class="search-btn"><i class="icofont icofont-search"></i></button>
+                    <th:block sec:authorize="isAuthenticated()">
+                        <ul class="user-menu">
+                            <li>
+                                <a href="#" class="user-name" th:text="${@accountService.findByEmail(#authentication.principal.username).fullName}"></a>
+                                <ul class="dropdown">
+                                    <li><a th:href="@{/account/profile}">Profile</a></li>
+                                    <li><a th:href="@{/movie/booking-history}">History</a></li>
+                                    <li><a th:href="@{/account/logout}">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </th:block>
+                    <th:block sec:authorize="!isAuthenticated()">
+                        <ul>
+                            <li><a href="#">Welcome Guest!</a></li>
+                            <li><a th:href="@{/account/login}">Login</a></li>
+							<li><a th:href="@{/account/register}">Register</a></li>
+                        </ul>
+                    </th:block>
+                </div>
+            </div>
+            <!-- Search dialog -->
+            <div class="overlay" id="searchOverlay"></div>
+            <div class="search-dialog" id="searchDialog">
+                <button class="close-dialog" id="closeDialog">X</button>
+                <form th:action="@{/movie/search-movies}" method="get" class="search-form">
+                    <select name="genre" class="theme-select">
+                        <option value="">All genres</option>
+                        <th:block th:each="genre : ${@genresService.findAll()}">
+                            <option th:value="${genre.name}" th:text="${genre.name}"></option>
+                        </th:block>
+                    </select>
+                    <input type="text" name="keyword" placeholder="Search movies..." class="theme-input" />
+                    <select name="theaterId" class="theme-select">
+                        <option value="">All theaters</option>
+                        <th:block th:each="theater : ${@theaterService.findAll()}">
+                            <option th:value="${theater.theaterId}" th:text="${theater.name}"></option>
+                        </th:block>
+                    </select>
+                    <select name="brandName" class="theme-select">
+                        <option value="">All brands</option>
+                        <th:block th:each="brand : ${@theaterService.findAllBrands()}">
+                            <option th:value="${brand}" th:text="${brand}"></option>
+                        </th:block>
+                    </select>
+                    <input type="date" name="date" class="theme-input"
+                        th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
+                    <input type="time" name="startTime" class="theme-input" />
+                    <button type="submit"><i class="icofont icofont-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </header>
+    <!-- header section end -->
+
+    <th:block th:replace="${content}"></th:block>
+
+    <!-- footer section start -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="widget">
+                        <img th:src="@{/assets/img/logo.png}" alt="about" />
+                        <p>7th Harley Place, London W1G 8LZ United Kingdom</p>
+                        <h6><span>Call us: </span>(+880) 111 222 3456</h6>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="widget">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Terms of Use</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Security</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="widget">
+                        <h4>Account</h4>
+                        <ul>
+                            <li><a href="#">My Account</a></li>
+                            <li><a href="#">Watchlist</a></li>
+                            <li><a href="#">Collections</a></li>
+                            <li><a href="#">User Guide</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="widget">
+                        <h4>Newsletter</h4>
+                        <p>Subscribe to our newsletter system now to get latest news from us.</p>
+                        <form action="#">
+                            <input type="text" placeholder="Enter your email.." />
+                            <button>SUBSCRIBE NOW</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </div>
+        <div class="copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 text-center text-lg-left">
+                        <div class="copyright-content">
+                            <p><a target="_blank" href="https://www.templateshub.net">Templates Hub</a></p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 text-center text-lg-right">
+                        <div class="copyright-content">
+                            <a href="#" class="scrollToTop">
+                                Back to top<i class="icofont icofont-arrow-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer><!-- footer section end -->
+
+    <!-- jquery main JS -->
+    <script th:src="@{/assets/js/jquery.min.js}"></script>
+    <!-- Bootstrap JS -->
+    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <!-- Slick nav JS -->
+    <script th:src="@{/assets/js/jquery.slicknav.min.js}"></script>
+    <!-- owl carousel JS -->
+    <script th:src="@{/assets/js/owl.carousel.min.js}"></script>
+    <!-- Popup JS -->
+    <script th:src="@{/assets/js/jquery.magnific-popup.min.js}"></script>
+    <!-- Isotope JS -->
+    <script th:src="@{/assets/js/isotope.pkgd.min.js}"></script>
+    <!-- main JS -->
+    <script th:src="@{/assets/js/main.js}"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#dob").datepicker({
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: "dd/mm/yy",
+                yearRange: "1990:2099"
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tabs = document.querySelectorAll(".cinema-tabs .tab-btn");
+            const seenBrands = new Set();
+
+            // Handle duplicate tabs
+            tabs.forEach(tab => {
+                const brandName = tab.dataset.name;
+                if (seenBrands.has(brandName)) {
+                    tab.remove(); // Remove duplicate tabs
+                } else {
+                    seenBrands.add(brandName); // Store processed brand
+                }
+            });
+
+            // Handle duplicate theaters in cinema-info section
+            const cinemaInfoBlocks = document.querySelectorAll(".cinema-info");
+            const seenTheaters = new Set();
+
+            cinemaInfoBlocks.forEach(cinemaBlock => {
+                const theaterName = cinemaBlock.querySelector("h4").innerText;
+                if (seenTheaters.has(theaterName)) {
+                    cinemaBlock.remove(); // Remove duplicate theaters
+                } else {
+                    seenTheaters.add(theaterName); // Store processed theater
+                }
+            });
+
+            // Fill current date into date input if no value exists
+            const dateInput = document.querySelector('input[name="date"]');
+            if (!dateInput.value) {
+                const today = new Date().toISOString().split("T")[0];
+                dateInput.value = today;
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("https://api.ipapi.com/api/check?access_key=4e586de960d7634c4446e0e516492631")
+                .then(response => response.json())
+                .then(data => {
+                    let latitude = data.latitude;
+                    let longitude = data.longitude;
+
+                    fetch(`/theaters/nearby?lat=${latitude}&lng=${longitude}`)
+                        .then(response => response.json())
+                        .then(theaters => updateTheaterList(theaters))
+                        .catch(error => console.error("Error fetching theaters:", error));
+                })
+                .catch(error => console.error("Error fetching location:", error));
+        });
+
+        function updateTheaterList(theaters) {
+            let theaterTabs = document.querySelector(".cinema-tabs");
+            theaterTabs.innerHTML = '';
+
+            theaters.forEach(theater => {
+                let button = document.createElement("button");
+                button.classList.add("tab-btn");
+                button.setAttribute("data-name", theater.name);
+                button.innerHTML = `
+                    <span>${theater.name}</span>
+                    <p>${theater.address}</p>
+                `;
+                theaterTabs.appendChild(button);
+            });
+        }
+
+        setTimeout(function () {
+            document.querySelector('.alert')?.remove();
+        }, 3000);
+    </script>
+
+    <!-- Script for dialog -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchBtn = document.querySelector(".search-btn");
+            const searchDialog = document.getElementById("searchDialog");
+            const closeDialog = document.getElementById("closeDialog");
+            const overlay = document.getElementById("searchOverlay");
+
+            // Open dialog when search button is clicked
+            searchBtn.addEventListener("click", function () {
+                searchDialog.classList.add("active");
+                overlay.classList.add("active");
+            });
+
+            // Close dialog when close button is clicked
+            closeDialog.addEventListener("click", function () {
+                searchDialog.classList.remove("active");
+                overlay.classList.remove("active");
+            });
+
+            // Close dialog when clicking outside the dialog
+            overlay.addEventListener("click", function () {
+                searchDialog.classList.remove("active");
+                overlay.classList.remove("active");
+            });
+        });
+    </script>
+</body>
+
+</html>

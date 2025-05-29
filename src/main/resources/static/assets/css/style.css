@@ -1,0 +1,2570 @@
+/*
+Theme Name: Movie Point
+Version: 1.0
+Author: Jsoft
+Description: Online Movie,Vedio and TV Show HTML Template
+*/
+
+/**
+ *** CSS Indexing ***
+ * THEME DEFAULT CSS
+ * RESET CSS
+ * HEADER AREA CSS
+ * HERO AREA CSS
+ * portfolio AREA CSS
+ * video AREA CSS
+ * news AREA CSS
+ * footer AREA CSS
+ * Movie details PAGE CSS
+ * seat plan PAGE CSS
+ * login PAGE CSS
+ * blog PAGE CSS
+ * blog details PAGE CSS
+ * PRELOADER CSS
+**/
+
+/*----------------------------------
+--------- THEME DEFAULT CSS --------
+----------------------------------*/
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,900');
+
+:root {
+	--primary-color: #eb315a;
+	/* Màu chính */
+	--secondary-color: #fece50;
+	/* Màu phụ */
+	--background-dark: #13151f;
+	--text-light: #b6b7b9;
+	--white: #fff;
+	--transition: all 0.3s ease;
+}
+
+body {
+	background: var(--background-dark);
+	color: var(--text-light);
+}
+
+/*----------------------------
+---------- RESET CSS ---------
+----------------------------*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 500;
+	color: #fff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	margin: 0px;
+}
+
+h1 {
+	font-size: 36px;
+}
+
+h2 {
+	font-size: 30px;
+}
+
+h4 {
+	font-size: 18px;
+}
+
+h6 {
+	font-size: 14px;
+}
+
+a {
+	transition: 0.6s;
+}
+
+a,
+a:hover {
+	color: #fff;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+iframe {
+	width: 100%;
+	border: none;
+}
+
+a,
+a:hover,
+a:focus,
+a:active,
+button:focus {
+	text-decoration: none;
+	border: none;
+	outline: 0;
+}
+
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+ol {
+	margin-bottom: 0;
+}
+
+select:focus,
+select:active {
+	box-shadow: none;
+	border: 0;
+	outline: 0
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
+	outline: none;
+}
+
+button {
+	cursor: pointer;
+}
+
+textarea {
+	height: 160px;
+}
+
+input[type="text"],
+input[type="submit"],
+button[type="submit"],
+input[type="email"],
+input[type="url"],
+input[type="tel"],
+input[type="search"],
+input[type="password"],
+input[type="number"],
+textarea {
+	background: #24262d;
+	width: 100%;
+	padding: 8px 15px;
+	border: none;
+}
+
+input[type="submit"],
+button[type="submit"] {
+	width: auto;
+	color: #666;
+	padding: 4px 15px;
+}
+
+textarea:focus {
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.section-title h1 i {
+	color: #fece50;
+	font-size: 40px;
+}
+
+.mt-100 {
+	margin-top: 100px;
+}
+
+.mt-30 {
+	margin-top: 30px;
+}
+
+.mt-20 {
+	margin-top: 20px;
+}
+
+.pt-60 {
+	padding-top: 60px;
+}
+
+.pb-90 {
+	padding-bottom: 90px;
+}
+
+.pb-20 {
+	padding-bottom: 20px;
+}
+
+.ptb-100 {
+	padding: 100px 0;
+}
+
+.ptb-90 {
+	padding: 90px 0;
+}
+
+.owl-nav div {
+	position: absolute;
+	top: 50%;
+	left: 20px;
+	width: 35px;
+	background: #fff;
+	color: #000;
+	height: 35px;
+	line-height: 36px;
+	border-radius: 100%;
+	text-align: center;
+	font-size: 29px;
+	transition: 0.4s;
+	margin-top: -60px;
+}
+
+.owl-nav div:hover {
+	background: #000;
+	color: #fff;
+}
+
+.owl-nav div.owl-next {
+	right: 20px;
+	left: auto;
+}
+
+.owl-dots {
+	text-align: center;
+	margin-top: 35px;
+}
+
+.owl-dot {
+	width: 20px;
+	height: 6px;
+	border-radius: 5px;
+	background: #595a5f;
+	display: inline-block;
+	margin: 0 5px;
+}
+
+.owl-dot.active {
+	width: 28px;
+	background: #eb315a;
+}
+
+.display-table {
+	display: table;
+	height: 100%;
+	width: 100%;
+}
+
+.display-tablecell {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.theme-btn {
+	background: var(--primary-color);
+	border: 1px solid var(--primary-color);
+	color: var(--white);
+	border-radius: 35px;
+	padding: 5px 25px;
+	display: inline-block;
+	font-size: 16px;
+	cursor: pointer;
+	font-weight: 500;
+}
+
+.theme-btn:hover {
+	background: transparent;
+	background: transparent;
+	color: var(--primary-color);
+}
+
+.theme-btn2:hover,
+.theme-btn2 {
+	color: #fff;
+	background: #963dad;
+	/* Old browsers */
+	background: -moz-linear-gradient(top, #963dad 0%, #9c3db1 34%, #ba3fc4 65%, #c340ca 100%);
+	/* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #963dad 0%, #9c3db1 34%, #ba3fc4 65%, #c340ca 100%);
+	/* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #963dad 0%, #9c3db1 34%, #ba3fc4 65%, #c340ca 100%);
+	border: none;
+}
+
+.flexbox-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+textarea,
+input,
+textarea::-webkit-input-placeholder,
+input::-webkit-input-placeholder {
+	color: #fff;
+}
+
+/*--------------------------------------
+-------- HEADER AREA CSS START --------
+---------------------------------------*/
+.header {
+	padding: 18px 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 99;
+}
+
+.header-area {
+	display: grid;
+	grid-template-rows: repeat(2, 1fr);
+	grid-template-columns: repeat(12, 1fr);
+	align-items: center;
+	grid-gap: 20px;
+}
+
+.logo {
+	grid-column: span 2;
+	grid-row: span 2;
+	padding-right: 15px;
+	margin-bottom: 10px;
+}
+
+.header-right {
+	grid-column: span 10;
+	text-align: right;
+	display: flex;
+	align-items: center;
+	margin-left: 550px;
+	margin-top: 10px;
+}
+
+.menu-area {
+	grid-column: span 10;
+}
+
+.mainmenu {
+	text-align: right;
+}
+
+.mainmenu li {
+	display: inline-block;
+	position: relative;
+}
+
+.mainmenu li a:not(.theme-btn) {
+	display: inline-block;
+	margin-right: 30px;
+	padding: 3px 0;
+}
+
+.slicknav_menu {
+	padding: 0;
+	background: transparent;
+}
+
+.mainmenu {
+	display: block;
+}
+
+.slicknav_menu {
+	display: none;
+}
+
+.header.sticky {
+	border-bottom: 1px solid #fff;
+	background: #000;
+}
+
+.mainmenu li:hover ul {
+	transform: scaleY(1);
+}
+
+.mainmenu li ul li {
+	display: block;
+}
+
+.mainmenu li ul {
+	position: absolute;
+	top: 100%;
+	background: #000;
+	padding: 5px 15px;
+	left: 0;
+	text-align: left;
+	min-width: 200px;
+	transform: scaleY(0);
+	transition: all 0.4s;
+}
+
+.mainmenu li a.active,
+.mainmenu li a:hover {
+	color: #eb315a;
+}
+
+.header-right form {
+	display: flex;
+	max-width: 380px;
+	border: 1px solid #eee;
+	border-radius: 30px;
+	margin: auto;
+}
+
+.header-right form button {
+	background: transparent;
+	color: #fff;
+	border: none;
+	padding-right: 10px;
+}
+
+option {
+	color: #000;
+}
+
+.header-right form select {
+	background: url('../img/select-icon.png') no-repeat right center;
+	color: #fff;
+	padding: 0 20px 0 30px;
+	border: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.header-right form input {
+	width: auto;
+	background: transparent;
+	color: #fff;
+	border: none;
+	margin: 0;
+	border-left: 1px solid #ddd;
+	margin-left: 20px;
+}
+
+.header-right ul li a:hover {
+	color: #eb315a;
+}
+
+.header-right ul li {
+	padding: 8px 0 0;
+	margin-left: 15px;
+	display: inline-block;
+}
+
+/*--------------------------------------
+--------- HEADER AREA CSS END ---------
+---------------------------------------*/
+
+/*----------------------------------
+-------- HERO AREA CSS START -------
+------------------------------------*/
+.hero-area {
+	position: relative;
+	background-image: url('../img/hero-area.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	overflow: hidden;
+}
+
+.hero-area-slide {
+	background: #13151f;
+	margin: 320px 15px 50px;
+	padding-top: 52px;
+	box-shadow: 0 0 20px #000000;
+}
+
+/* Container cho poster */
+.poster-container {
+	position: relative;
+	display: inline-block;
+	border-radius: 8px;
+	transition: transform 0.3s ease;
+	/* Hiệu ứng phóng to container */
+}
+
+/* Ẩn nút Details ban đầu */
+.view-details-hover {
+	position: absolute;
+	bottom: 200px;
+	/* Vị trí từ dưới lên */
+	left: 52%;
+	/* Căn giữa theo chiều ngang */
+	transform: translateX(-50%);
+	/* Căn giữa chính xác */
+	opacity: 0;
+	/* Ẩn nút */
+	transition: opacity 0.3s ease-in-out;
+	/* Hiệu ứng mờ dần */
+}
+
+/* Hiển thị nút Details khi rê chuột vào phần chứa hình ảnh */
+.poster-container:hover .view-details-hover {
+	opacity: 1;
+	/* Hiển thị nút */
+}
+
+/* Định dạng cho container của hình ảnh */
+.poster-container {
+	position: relative;
+	/* Để định vị nút bên trong */
+	display: inline-block;
+	/* Đảm bảo kích thước vừa với hình ảnh */
+}
+
+/* Định dạng nút Details */
+.custom-details-btn {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: white;
+	text-decoration: none;
+	border-radius: 5px;
+	transition: background-color 0.3s ease-in-out;
+}
+
+.custom-details-btn:hover {
+	background-color: #0056b3;
+}
+
+/* Hiệu ứng phóng to container khi hover */
+.poster-container:hover {
+	transform: scale(1.05);
+	/* Phóng to nhẹ container */
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+	/* Đổ bóng cho container */
+}
+
+
+/* Style cho nút trailer */
+.btn-trailer {
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: none;
+	/* Ẩn nút ban đầu */
+	color: white;
+	padding: 10px 20px;
+	font-size: 16px;
+	border-radius: 5px;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-weight: bold;
+	opacity: 0;
+	transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Hiện nút trailer khi hover vào container */
+.poster-container:hover .btn-trailer {
+	display: block;
+	opacity: 1;
+	transform: translate(-50%, -50%) scale(1.1);
+	/* Phóng to nhẹ nút */
+}
+
+
+/* Tùy chỉnh màu sắc nút Details */
+.custom-details-btn {
+	background-color: #17a2b8;
+	/* Màu xanh dương nhạt */
+	color: white;
+	padding: 10px 20px;
+	font-size: 16px;
+	font-weight: bold;
+	border: none;
+	border-radius: 5px;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.custom-details-btn:hover {
+	background-color: #138496;
+	/* Màu tối hơn khi hover */
+	transform: scale(1.05);
+	/* Phóng to nhẹ */
+}
+
+
+
+.hero-area-content>img {
+	position: relative;
+	margin-top: -120px;
+}
+
+.hero-area-slider {
+	margin: auto;
+	max-width: 950px;
+}
+
+.author-review {
+	color: #fece50;
+	float: left;
+}
+
+.review h4 {
+	padding-left: 25px;
+	overflow: hidden;
+}
+
+.review {
+	margin: 8px 0 35px;
+}
+
+.hero-area-content h3 {
+	margin-top: 35px;
+}
+
+.single-slide-cast {
+	width: 11.5%;
+	margin-right: 1%;
+	float: left;
+	margin-top: 15px;
+}
+
+.single-slide-cast img {
+	border-radius: 100%;
+}
+
+.single-slide-cast.text-center {
+	height: 45px;
+	line-height: 45px;
+	border-radius: 100%;
+	max-width: 45px;
+	border: 2px solid #eb315a;
+	color: #eb315a;
+}
+
+.pr-50 {
+	padding-right: 10px;
+	margin-left: -15px;
+}
+
+.slide-trailor {
+	overflow: hidden;
+	margin-top: 40px;
+}
+
+.slide-cast {
+	overflow: hidden;
+}
+
+.slide-trailor h3 {
+	float: left;
+	margin: 0;
+	margin-right: 25px;
+}
+
+.hero-area-thumb .hero-area-slide {
+	margin: 0 15px;
+}
+
+.thumb-prev {
+	position: absolute;
+	bottom: 0;
+	left: -690px;
+	max-width: 950px;
+	-webkit-perspective: 80px;
+	perspective: 80px;
+}
+
+.thumb-prev .hero-area-slide {
+	-webkit-transform-style: preserve-3d;
+	-webkit-transform: rotateY(2deg);
+	transform-style: preserve-3d;
+	transform: rotateY(2deg);
+	cursor: pointer;
+}
+
+.thumb-next {
+	position: absolute;
+	bottom: 0;
+	right: -690px;
+	max-width: 950px;
+	-webkit-perspective: 80px;
+	perspective: 80px;
+}
+
+.thumb-next .hero-area-slide {
+	-webkit-transform-style: preserve-3d;
+	-webkit-transform: rotateY(-2deg);
+	transform-style: preserve-3d;
+	transform: rotateY(-2deg);
+	cursor: pointer;
+}
+
+/*----------------------------------
+--------- HERO AREA CSS END --------
+-----------------------------------*/
+
+/*----------------------------------
+-------- portfolio AREA CSS START -------
+------------------------------------*/
+hr {
+	margin: 0;
+	border-top: 1px solid #ddd;
+}
+
+.portfolio-menu {
+	padding-top: 30px;
+}
+
+.portfolio-menu li {
+	display: inline-block;
+	position: relative;
+	margin-left: 15px;
+	padding-bottom: 20px;
+	cursor: pointer;
+}
+
+.portfolio-menu li::before {
+	background: transparent;
+	bottom: -2px;
+	left: 0;
+	right: 0;
+	transition: 0.4s;
+	content: "";
+	height: 4px;
+	position: absolute;
+	z-index: 99;
+}
+
+.portfolio-menu li.active {
+	color: #fff;
+}
+
+.portfolio-menu li.active::before,
+.portfolio-menu li:hover::before {
+	background: #eb315a;
+}
+
+.portfolio-content h2 {
+	margin-top: 20px;
+}
+
+.single-portfolio {
+	margin-top: 50px;
+}
+
+.video-area,
+.single-portfolio-img {
+	overflow: hidden;
+	position: relative;
+}
+
+.single-portfolio-img img {
+	width: 100%;
+	height: 400px;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+
+.single-portfolio-img:hover .popup-youtube i {
+	opacity: 1;
+}
+
+.single-portfolio-img .popup-youtube i {
+	opacity: 0;
+}
+
+.video-area img,
+.single-portfolio-img img {
+	transition: 0.9s;
+}
+
+.video-area:hover img,
+.single-portfolio:hover img {
+	transform: scale(1.2);
+}
+
+.single-portfolio .review {
+	margin-bottom: 0;
+}
+
+.portfolio-sidebar img {
+	margin-top: 30px;
+	border-radius: 10px;
+}
+
+.portfolio-sidebar {
+	margin-top: 20px;
+}
+
+.movie-title {
+	font-size: 1.5em;
+	font-weight: bold;
+	color: white;
+	text-decoration: none;
+
+	display: block;
+	/* Đảm bảo nó hoạt động đúng */
+	width: 100%;
+	/* Giới hạn trong khung */
+	white-space: nowrap;
+	/* Ngăn tiêu đề xuống dòng */
+	overflow: hidden;
+	/* Ẩn phần bị tràn */
+	text-overflow: ellipsis;
+	/* Hiển thị dấu "..." nếu quá dài */
+}
+
+
+.movie-title:hover {
+	text-decoration: none;
+}
+
+.rating-overlay span i {
+	color: #FFD700;
+	/* Màu vàng */
+	font-size: 1.2em;
+	/* Tùy chỉnh kích thước nếu cần */
+}
+
+.rating-overlay span i:hover {
+	color: #FFC107;
+	/* Hiệu ứng sáng hơn khi hover (tuỳ chọn) */
+}
+
+
+
+/*----------------------------------
+--------- portfolio AREA CSS END --------
+-----------------------------------*/
+
+
+/*----------------------------------
+-------- video AREA CSS START -------
+------------------------------------*/
+.video-area {
+	position: relative;
+	margin-top: 35px;
+}
+
+.popup-youtube i:hover {
+	color: #fece50;
+	border: 2px solid #fece50;
+}
+
+.popup-youtube i {
+	width: 60px;
+	height: 60px;
+	line-height: 60px;
+	color: #fff;
+	border: 2px solid #fff;
+	border-radius: 50%;
+	text-align: center;
+	font-size: 18px;
+	display: inline-block;
+	transition: all 0.4s;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+.video-text {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	background: rgba(19, 21, 31, 0.6);
+	padding: 20px 35px;
+	width: 100%;
+}
+
+.video-text .review {
+	margin-bottom: 0;
+}
+
+/*----------------------------------
+--------- video AREA CSS END --------
+-----------------------------------*/
+
+/*----------------------------------
+-------- news AREA CSS START -------
+------------------------------------*/
+.single-news {
+	position: relative;
+	color: #fff;
+}
+
+.news-content {
+	position: absolute;
+	left: 60px;
+	bottom: 35px;
+	right: 420px;
+}
+
+.news-bg-1 {
+	background: url('../img/news/news1.jpg') no-repeat center / cover;
+	height: 350px;
+}
+
+.news-bg-2 {
+	background: url('../img/news/news2.jpg') no-repeat center / cover;
+	height: 350px;
+}
+
+.news-bg-3 {
+	background: url('../img/news/news3.jpg') no-repeat center / cover;
+	height: 350px;
+}
+
+.news-date {
+	position: absolute;
+	left: 60px;
+	top: 0;
+	background: #f09819;
+	/* Old browsers */
+	background: -moz-linear-gradient(-45deg, #f09819 0%, #ef8128 34%, #ec474c 64%, #eb315a 100%);
+	/* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg, #f09819 0%, #ef8128 34%, #ec474c 64%, #eb315a 100%);
+	/* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg, #f09819 0%, #ef8128 34%, #ec474c 64%, #eb315a 100%);
+	padding: 20px;
+}
+
+.news-date h2 span {
+	font-size: 16px;
+}
+
+.news-content>h2 {
+	margin-bottom: 15px;
+}
+
+.news-slider .single-news {
+	max-width: 950px;
+	margin: 50px auto 0;
+}
+
+.single-news a {
+	position: absolute;
+	right: 40px;
+	bottom: 40px;
+}
+
+.news-slide-area {
+	position: relative;
+	overflow: hidden;
+}
+
+.news-next {
+	position: absolute;
+	width: 950px;
+	bottom: 0;
+	left: 0;
+	margin-left: -770px;
+	z-index: 99;
+	cursor: pointer;
+}
+
+.news-prev {
+	position: absolute;
+	width: 950px;
+	bottom: 0;
+	right: 0;
+	margin-right: -770px;
+	z-index: 99;
+	cursor: pointer;
+	height: 350px;
+}
+
+/*----------------------------------
+--------- news AREA CSS END --------
+-----------------------------------*/
+
+/*----------------------------------
+--------- footer AREA CSS START --------
+-----------------------------------*/
+.footer {
+	background: url('../img/footer-bg.png') no-repeat bottom center / cover;
+	position: relative;
+	padding: 90px 0 30px;
+}
+
+.footer::before {
+	position: absolute;
+	background: #13151f;
+	top: 0;
+	left: 0;
+	content: "";
+	width: 100%;
+	height: 100%;
+	opacity: 0.9;
+}
+
+.widget h4,
+.widget img {
+	margin-bottom: 40px;
+}
+
+.widget ul li {
+	margin-top: 15px;
+}
+
+.widget h6 {
+	margin-top: 18px;
+}
+
+.widget {
+	margin-bottom: 40px;
+}
+
+.widget button {
+	background: transparent;
+	color: #eb315a;
+	border: none;
+	padding: 0;
+}
+
+.widget form {
+	margin-top: 25px;
+}
+
+.copyright {
+	padding-top: 25px;
+}
+
+/*----------------------------------
+--------- footer AREA CSS END --------
+-----------------------------------*/
+
+/*----------------------------------
+---- Movie details PAGE CSS START ----
+------------------------------------*/
+.breadcrumb-area {
+	position: relative;
+	background-image: url('../img/breadcrumb.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	padding: 280px 0 200px;
+}
+
+.breadcrumb-area-content {
+	text-align: center;
+}
+
+.breadcrumb-area-content h1 {
+	font-size: 60px;
+}
+
+.transformers-box {
+	padding: 35px;
+	box-shadow: 0 0 20px #000000;
+	position: relative;
+}
+
+.transformers-box .transformers-content img {
+	display: block;
+	position: relative;
+}
+
+.transformers-content>p {
+	margin: 12px 0 30px;
+	position: relative;
+	padding-left: 70px;
+}
+
+.transformers-content>h2+a.theme-btn {
+	margin: 12px 10px 20px 0;
+}
+
+.transformers-content>p::before {
+	position: absolute;
+	content: "";
+	left: 0;
+	bottom: 0;
+	top: 0;
+	width: 55px;
+	height: 2px;
+	margin: auto;
+	background: #eb315a;
+}
+
+.transformers-left {
+	color: #eb315a;
+	min-width: 100px;
+}
+
+.transformers-content ul li {
+	display: flex;
+	margin-top: 12px;
+	font-weight: 300;
+}
+
+.transformers-right .theme-btn {
+	margin: 0 8px;
+	padding: 2px 15px;
+}
+
+@media (max-width: 576px) {
+	.header-right form {
+		max-width: 100%;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.header-right form select,
+	.header-right form input {
+		width: 100%;
+		margin: 0;
+	}
+
+	.header-right form button {
+		padding: 5px;
+	}
+}
+
+/* Cập nhật màu vàng cho sao rating */
+.icofont-star {
+	color: var(--secondary-color);
+	/* Màu vàng */
+	font-size: 16px;
+	/* Tùy chỉnh kích thước sao */
+	margin-right: 2px;
+	/* Khoảng cách giữa các sao */
+	margin-top: 20px;
+}
+
+
+.transformers-right span {
+	margin-right: 10px;
+	display: inline-block;
+}
+
+
+.transformers-bottom {
+	display: flex;
+	margin-top: 10px;
+	justify-content: space-between;
+}
+
+.transformers-bottom span {
+	display: block;
+	color: #eb315a;
+}
+
+.transformers-bottom p {
+	margin-bottom: 8px;
+}
+
+.transformers-box>.theme-btn {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	border-radius: 5px 0 0;
+}
+
+.details-content>div {
+	margin-top: 30px;
+}
+
+.details-content {
+	padding-top: 10px;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 50px;
+	width: 1100px;
+}
+
+.details-content>div h2 {
+	margin-bottom: 20px;
+}
+
+.details-overview h2 {
+	position: relative;
+	padding-bottom: 10px;
+}
+
+.details-overview h2::before {
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	background: #eb315a;
+	content: "";
+	width: 50px;
+	height: 2px;
+}
+
+.select-container {
+	position: relative;
+	margin-bottom: 30px;
+}
+
+.textarea-container {
+	position: relative;
+}
+
+.textarea-container button {
+	color: #fff;
+	background: transparent;
+	font-size: 20px;
+	border: none;
+}
+
+.textarea-container button,
+.select-container i {
+	position: absolute;
+	right: 15px;
+	bottom: 12px;
+	margin: auto;
+}
+
+.details-comment {
+	display: flex;
+	align-items: center;
+}
+
+.details-comment a {
+	flex: 1;
+	text-align: center;
+}
+
+.details-comment p {
+	flex: 5;
+	margin-left: 25px;
+}
+
+.details-thumb>div {
+	padding-top: 20px;
+	display: flex;
+	width: 50%;
+}
+
+.thumb-icon {
+	width: 45px;
+	font-size: 45px;
+}
+
+.thumb-text {
+	flex: 5;
+}
+
+.details-thumb {
+	display: flex;
+}
+
+.details-thumb>div h4,
+.details-thumb>div i {
+	transition: 0.4s;
+}
+
+.details-thumb>div:hover h4,
+.details-thumb>div:hover i {
+	color: #eb315a
+}
+
+.details-thumb-next {
+	text-align: right;
+}
+
+.thumb-text h4 {
+	margin-bottom: 2px;
+}
+
+/*----------------------------------
+----- Movie details PAGE CSS END ----
+-----------------------------------*/
+
+/*----------------------------------
+-------- seat plan PAGE CSS START -------
+------------------------------------*/
+.buy-ticket {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100%;
+	display: none;
+	background: rgba(0, 0, 0, 0.4);
+	z-index: 99;
+	color: #171717;
+}
+
+.buy-ticket-area {
+	margin-top: 140px;
+	background: #f5f5f5;
+	box-shadow: 0 0 5px #222;
+	position: relative;
+	padding: 100px 120px 120px;
+}
+
+.buy-ticket-area>a {
+	color: #171717;
+	font-size: 50px;
+	top: 20px;
+	right: 25px;
+	position: absolute;
+}
+
+.buy-ticket-box h4 {
+	color: #eb315a;
+	margin-bottom: 50px;
+}
+
+.buy-ticket-box h5 {
+	color: #000;
+	margin-bottom: 15px;
+}
+
+.buy-ticket-box h6 {
+	color: #060606;
+	text-align: center;
+	border-bottom: 5px solid #eb315a;
+	padding-bottom: 8px;
+}
+
+.ticket-box-table {
+	display: flex;
+	padding-top: 35px;
+	justify-content: space-between;
+}
+
+.ticket-table-seat td.active,
+.ticket-table-seat td:hover {
+	background: #eb315a;
+	border-color: #eb315a;
+	color: #fff;
+}
+
+.ticket-table-seat td {
+	width: 19px;
+	height: 19px;
+	border: 1px solid #aaa;
+	border-radius: 30px;
+	text-align: center;
+	line-height: 15px;
+	border-collapse: collapse;
+	margin: 3px;
+	font-size: 10px;
+	display: inline-block;
+}
+
+.ticket-box-table table:not(.ticket-table-seat) td {
+	line-height: 24px;
+}
+
+.ticket-box-available span {
+	display: inline-block;
+	margin-right: 30px;
+}
+
+.ticket-box-available input {
+	margin-right: 5px;
+	position: relative;
+	top: 2px;
+}
+
+.ticket-box-available {
+	margin: 50px 0;
+}
+
+.buy-ticket-box ul li p {
+	text-transform: uppercase;
+	font-weight: 600;
+	margin-bottom: 2px;
+}
+
+.buy-ticket-box ul li {
+	margin-bottom: 25px;
+}
+
+.buy-ticket-box ul li:last-child {
+	margin-bottom: 0;
+}
+
+.buy-ticket-box ul {
+	position: relative;
+}
+
+.buy-ticket-box ul::before {
+	left: -50px;
+	top: 30px;
+	bottom: 50px;
+	width: 2px;
+	background: #aaa;
+	content: "";
+	position: absolute;
+}
+
+.buy-ticket-box>a.theme-btn {
+	margin-right: 5px;
+}
+
+/*----------------------------------
+--------- seat plan PAGE CSS END --------
+-----------------------------------*/
+
+/*----------------------------------
+-------- login PAGE CSS START -------
+------------------------------------*/
+
+/*----------------------------------
+--------- login PAGE CSS END --------
+-----------------------------------*/
+.login-area {
+	background-image: url('../img/breadcrumb.png');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	padding: 50px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+
+}
+
+.login-form {
+	padding: 30px;
+	border-radius: 8px;
+	width: 100%;
+	max-width: 400px;
+}
+
+h2 {
+	font-size: 2rem;
+	margin-bottom: 20px;
+	color: #fff;
+	text-align: center;
+}
+
+input[type="email"],
+input[type="password"] {
+	background-color: #2a2a2a;
+	color: #fff;
+	border: 1px solid #444;
+	padding: 10px;
+	width: 100%;
+	border-radius: 4px;
+	margin-bottom: 20px;
+	font-size: 1rem;
+}
+
+button {
+	background-color: #e50914;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	font-weight: bold;
+	width: 100%;
+	border-radius: 4px;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+button:hover {
+	background-color: #ff1c24;
+}
+
+.form-check-label,
+a {
+	font-size: 0.9rem;
+	color: #888;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
+.form-check {
+	margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+	.login-form {
+		width: 90%;
+	}
+
+	button {
+		width: 100%;
+	}
+}
+
+/*----------------------------------
+-------- Register PAGE CSS START -------
+------------------------------------*/
+
+.register-area {
+
+	background-image: url('../img/breadcrumb.png');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	padding: 50px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+.register-form {
+	margin-top: 70px;
+	padding: 30px;
+	border-radius: 8px;
+	width: 100%;
+	max-width: 400px;
+}
+
+.register-form h2 {
+	font-size: 2rem;
+	margin-bottom: 20px;
+	color: #fff;
+	text-align: center;
+}
+
+.register-area input[type="text"],
+.register-area input[type="email"],
+.register-area input[type="password"],
+.register-area input[type="date"] {
+	background-color: #2a2a2a;
+	color: #fff;
+	border: 1px solid #444;
+	padding: 10px;
+	width: 100%;
+	border-radius: 4px;
+	margin-bottom: 20px;
+	font-size: 1rem;
+}
+
+
+button {
+	background-color: #e50914;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	font-weight: bold;
+	width: 100%;
+	border-radius: 4px;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+button:hover {
+	background-color: #ff1c24;
+}
+
+.form-check-label,
+a {
+	font-size: 0.9rem;
+	color: #888;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #fff;
+	text-decoration: underline;
+}
+
+.form-check {
+	margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+	.register-form {
+		width: 90%;
+	}
+
+	button {
+		width: 100%;
+	}
+}
+
+/* Thêm hiệu ứng hiển thị lỗi */
+.error-message {
+	color: #ff4d4d;
+	/* Màu đỏ nổi bật */
+	font-size: 1rem;
+	/* Chữ to hơn */
+	font-weight: bold;
+	margin-top: -15px;
+	margin-bottom: 15px;
+	display: block;
+	text-align: left;
+}
+
+/* Hiệu ứng khi input có lỗi */
+.register-area input[type="text"].is-invalid,
+.register-area input[type="email"].is-invalid,
+.register-area input[type="password"].is-invalid,
+.register-area input[type="date"].is-invalid {
+	border-color: #ff4d4d;
+	/* Viền đỏ khi có lỗi */
+	background-color: #2a2a2a;
+}
+
+/* Khi người dùng nhập vào, màu viền thay đổi để tránh quá gắt */
+.register-area input[type="text"].is-invalid:focus,
+.register-area input[type="email"].is-invalid:focus,
+.register-area input[type="password"].is-invalid:focus,
+.register-area input[type="date"].is-invalid:focus {
+	border-color: #ff8080;
+	outline: none;
+}
+
+
+/*----------------------------------
+--------- Register PAGE CSS END --------
+-----------------------------------*/
+
+
+/*----------------------------------
+-------- blog PAGE CSS START -------
+------------------------------------*/
+.blog-area {
+	padding-top: 30px;
+}
+
+.blog-area .single-news {
+	margin-top: 70px;
+}
+
+/*----------------------------------
+--------- blog PAGE CSS END --------
+-----------------------------------*/
+
+/*----------------------------------
+-------- blog details PAGE CSS START -------
+------------------------------------*/
+.news-details a i {
+	margin-right: 5px;
+}
+
+.news-details>h2 {
+	margin: 30px 0 5px;
+}
+
+.news-details>h2+a,
+.news-details>h2+a+a {
+	margin-right: 10px;
+	display: inline-block;
+}
+
+.news-details>p {
+	margin-top: 25px;
+}
+
+.news-details .details-thumb {
+	border-top: 1px solid #ddd;
+	padding-bottom: 15px;
+}
+
+.news-details .details-comment {
+	padding: 25px 0 30px;
+}
+
+.news-details .details-reply {
+	margin-top: 25px;
+}
+
+.news-details .details-reply h2 {
+	margin-bottom: 25px;
+}
+
+.blog-sidebar ul li {
+	border-bottom: 1px solid #ddd;
+	margin-top: 10px;
+	padding-bottom: 3px;
+}
+
+.blog-sidebar h4 {
+	margin-top: 35px;
+}
+
+.news-details {
+	padding-top: 35px;
+}
+
+.detail-author {
+	margin: 40px 0;
+	border-top: 1px solid #fff;
+	border-bottom: 1px solid #fff;
+	padding: 30px 0;
+}
+
+.details-author h4 {
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.details-author a {
+	margin-left: 20px;
+}
+
+.movie-genres .genres-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	/* Cho phép các thể loại tự động xuống dòng khi không đủ chỗ */
+}
+
+.movie-genres .genres-list li {
+	margin-right: 10px;
+	/* Khoảng cách giữa các thể loại */
+	background-color: #f1f1f1;
+	/* Màu nền cho mỗi thể loại */
+	padding: 5px 10px;
+	border-radius: 20px;
+	/* Viền tròn cho mỗi thể loại */
+	font-size: 14px;
+	color: #333;
+}
+
+.movie-genres .genres-list li:last-child {
+	margin-right: 0;
+	/* Loại bỏ margin ở phần tử cuối cùng */
+}
+
+.movie-duration,
+.movie-release-date {
+	margin-top: 15px;
+}
+
+.movie-duration h4,
+.movie-release-date h4 {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.movie-duration p,
+.movie-release-date p {
+	font-size: 14px;
+	color: #555;
+}
+
+/* General Styles */
+.movie-schedule {
+	font-family: Arial, sans-serif;
+	margin: 30px auto;
+	padding: 20px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	max-width: 90%;
+	/* Đặt chiều rộng tối đa là 90% chiều rộng của màn hình */
+	width: 100%;
+	/* Đảm bảo chiều rộng là 100% */
+	height: 600px;
+	/* Đặt chiều cao cố định hoặc có thể thay đổi giá trị */
+	overflow: auto;
+	/* Cho phép cuộn khi nội dung vượt quá chiều cao hoặc chiều rộng */
+}
+
+.movie-schedule h2 {
+	margin-bottom: 15px;
+	font-size: 24px;
+	color: #333;
+}
+
+/* Header Buttons */
+.schedule-header {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 15px;
+	justify-content: flex-start;
+	/* Sắp xếp các nút về bên trái */
+	flex-wrap: nowrap;
+	/* Đảm bảo các button không bị xuống dòng */
+	width: max-content;
+	/* Cho phép chiều rộng tự động mở rộng theo nội dung */
+	overflow-x: scroll;
+	/* Cho phép cuộn ngang nếu cần */
+}
+
+#scheduleHeader {
+	display: flex;
+	gap: 10px;
+	/* Khoảng cách giữa các button */
+	justify-content: flex-start;
+	/* Sắp xếp các button về bên trái */
+	flex-wrap: nowrap;
+	/* Không cho phép các button xuống dòng */
+	overflow-x: auto;
+	/* Cho phép cuộn ngang khi cần thiết */
+	width: 100%;
+	/* Đảm bảo chiều rộng của phần tử chứa */
+	padding: 5px 0;
+	/* Thêm padding để nhìn đẹp hơn */
+}
+
+
+/* Các phần tử lịch sẽ có giao diện đẹp hơn */
+.date-container {
+	display: flex;
+	gap: 10px;
+	justify-content: center;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	padding: 10px 0;
+	white-space: nowrap;
+	position: relative;
+}
+
+.loading#showtimeLoading {
+	display: none;
+	color: #eb315a;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+.reset-btn {
+	background: #fece50;
+	margin-left: 10px;
+}
+
+.reset-btn:hover {
+	background: #eb315a;
+}
+
+.date-btn {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 70px;
+	height: 80px;
+	border-radius: 12px;
+	background-color: #f5f5f5;
+	color: #000;
+	font-weight: bold;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+/* Định dạng ngày trong nút */
+.date-btn .day {
+	font-size: 26px;
+	font-weight: bold;
+	color: #000;
+}
+
+.date-btn .weekday {
+	font-size: 14px;
+	color: #555;
+	font-weight: 500;
+}
+
+/* Ngày hôm nay */
+.date-btn.today {
+	background: #f0f0f0;
+	color: #fff;
+	font-weight: bold;
+}
+
+/* Ngày được chọn */
+.date-btn.active {
+	background-color: #b31a60;
+	color: #fff;
+}
+
+/* Hiệu ứng hover */
+.date-btn:hover {
+	background-color: #e1e1e1;
+}
+
+.theme-select,
+.theme-input {
+	background: #24262d;
+	border: 1px solid #ddd;
+	border-radius: 30px;
+	color: #fff;
+	padding: 8px 15px;
+	margin-right: 10px;
+	width: 100px;
+}
+
+.theme-select:focus,
+.theme-input:focus {
+	outline: none;
+	border-color: #eb315a;
+	box-shadow: 0 0 5px rgba(235, 49, 90, 0.5);
+}
+
+.theme-select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background: url('../img/select-icon.png') no-repeat right 15px center;
+	padding-right: 30px;
+}
+
+.cinema-tabs {
+	display: flex;
+	flex-wrap: nowrap;
+	/* Ngăn các nút xuống dòng */
+	justify-content: flex-start;
+	/* Căn giữa các nút */
+	align-items: center;
+	gap: 10px;
+	overflow-x: auto;
+	/* Cuộn ngang nếu quá nhiều nút */
+	padding: 10px 0;
+	white-space: nowrap;
+	/* Ngăn chữ xuống dòng */
+}
+
+/* Ẩn scrollbar trên các trình duyệt phổ biến */
+.cinema-tabs::-webkit-scrollbar {
+	display: none;
+}
+
+.cinema-tabs {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.tab-btn {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	color: #333;
+	padding: 6px 10px;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	transition: all 0.3s ease-in-out;
+	text-align: center;
+	background-color: #f8f8f8;
+	cursor: pointer;
+	font-size: 14px;
+	min-width: 80px;
+	/* Thu nhỏ nút */
+	max-width: 100px;
+}
+
+/* Thu nhỏ ảnh */
+.tab-btn img {
+	width: 35px;
+	height: 35px;
+	margin-bottom: 3px;
+}
+
+/* Hiệu ứng hover */
+.tab-btn:hover {
+	background-color: #ddd;
+	border-color: #bbb;
+	transform: scale(1.05);
+}
+
+/* Nút active */
+.tab-btn.active {
+	background-color: #6c5ce7;
+	color: #fff;
+	border-color: #6c5ce7;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+	.cinema-tabs {
+		overflow-x: scroll;
+		flex-wrap: nowrap;
+	}
+
+	.tab-btn {
+		min-width: 70px;
+		font-size: 12px;
+		padding: 4px 8px;
+	}
+
+	.tab-btn img {
+		width: 30px;
+		height: 30px;
+	}
+}
+
+
+
+/* Cinema Information */
+.cinema-info {
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	margin-top: 10px;
+}
+
+.cinema {
+	padding: 15px;
+	background-color: #f9f9f9;
+	border-radius: 5px;
+	border: 1px solid #eee;
+}
+
+.cinema h4 {
+	margin-bottom: 5px;
+	color: #333;
+}
+
+.cinema p {
+	margin-bottom: 10px;
+	color: #777;
+}
+
+.showtimes {
+	display: flex;
+	gap: 10px;
+}
+
+.time {
+	padding: 5px 10px;
+	background-color: #6c5ce7;
+	color: #fff;
+	border-radius: 5px;
+	font-size: 14px;
+	display: flex;
+	/* Đảm bảo thẻ time bao bọc có kiểu display flex */
+	align-items: center;
+	/* Căn giữa nội dung */
+}
+
+.time-link {
+	background-color: transparent;
+	color: #fff;
+	text-decoration: none;
+	/* Xóa gạch chân của thẻ a */
+	font-size: 14px;
+	padding: 5px;
+	display: inline-block;
+	/* Giúp thẻ a hành xử như input */
+	width: 100%;
+	text-align: center;
+}
+
+.time-link:hover {
+	background-color: #5a4dd0;
+	/* Đổi màu khi hover */
+}
+
+.user-menu {
+	display: inline-block;
+	position: relative;
+	z-index: 1000;
+	/* Giữ menu trên các phần tử khác */
+}
+
+.user-menu>li {
+	display: inline-block;
+	position: relative;
+}
+
+.user-menu .user-name {
+	padding: 8px 15px;
+	color: #fff;
+	font-weight: 600;
+	cursor: pointer;
+	transition: color 0.3s ease;
+}
+
+.user-menu .user-name:hover {
+	color: #eb315a;
+}
+
+.user-menu .dropdown {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: #000;
+	padding: 10px;
+	min-width: 150px;
+	text-align: left;
+	display: none;
+	border-radius: 5px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+	opacity: 0;
+	transform: translateY(-10px);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.user-menu li:hover .dropdown {
+	display: block;
+	opacity: 1;
+	pointer-events: auto;
+	/* Cho phép click khi hiển thị */
+}
+
+.user-menu .dropdown li {
+	display: block;
+}
+
+.user-menu .dropdown a {
+	display: block;
+	padding: 8px 12px;
+	color: #fff;
+	text-decoration: none;
+}
+
+.user-menu .dropdown a:hover {
+	background: #eb315a;
+	color: #fff;
+}
+
+
+.user-menu li:hover .dropdown {
+	display: block;
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.user-menu .dropdown li {
+	display: block;
+}
+
+.user-menu .dropdown a {
+	display: block;
+	padding: 8px 12px;
+	color: #fff;
+	text-decoration: none;
+	transition: background-color 0.3s ease;
+}
+
+.user-menu .dropdown a:hover {
+	background: #eb315a;
+	color: #fff;
+}
+
+.login-btn,
+.register-btn {
+	padding: 8px 15px;
+	border-radius: 5px;
+	text-decoration: none;
+	color: #fff;
+	font-weight: bold;
+}
+
+.login-btn {
+	background: #007bff;
+}
+
+.register-btn {
+	background: #28a745;
+}
+
+.login-btn:hover,
+.register-btn:hover {
+	opacity: 0.8;
+}
+
+.alert {
+	padding: 10px 15px;
+	margin: 10px 0;
+	border-radius: 5px;
+	font-weight: bold;
+	text-align: center;
+}
+
+.alert-success {
+	background-color: #d4edda;
+	color: #155724;
+	border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+	background-color: #f8d7da;
+	color: #721c24;
+	border: 1px solid #f5c6cb;
+}
+
+/* Seat Map */
+.seat-map {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.screen {
+	width: 80%;
+	height: 30px;
+	background-color: #ccc;
+	margin-bottom: 20px;
+	text-align: center;
+	line-height: 30px;
+	font-weight: bold;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.seat-row {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 10px;
+}
+
+.seat {
+	width: 40px;
+	height: 40px;
+	margin: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 14px;
+	cursor: pointer;
+	transition: var(--transition), box-shadow 0.2s ease;
+}
+
+.seat.available {
+	background-color: #f0f0f0;
+	color: #333;
+}
+
+.seat.booked {
+	background-color: #f44336;
+	color: white;
+	cursor: not-allowed;
+}
+
+.seat.selected {
+	background-color: #4caf50;
+	color: white;
+}
+
+.seat:hover:not(.booked) {
+	transform: scale(1.1);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-container {
+	display: flex;
+	gap: 10px;
+	overflow-x: auto;
+	flex-wrap: nowrap;
+	padding: 10px 0;
+	white-space: nowrap;
+	-ms-overflow-style: none;
+	/* IE and Edge */
+	scrollbar-width: none;
+	/* Firefox */
+}
+
+.scroll-container::-webkit-scrollbar {
+	display: none;
+	/* Chrome, Safari, Opera */
+}
+
+.cinema-tabs,
+.date-container {
+	@extend .scroll-container;
+}
+
+/* Ticket Info */
+.ticket-info {
+	margin-top: 20px;
+	text-align: center;
+}
+
+.ticket-info span {
+	margin-right: 20px;
+	font-size: 16px;
+	color: #333;
+}
+
+/* Action Buttons */
+.action-buttons {
+	margin-top: 20px;
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+	/* Khoảng cách giữa các nút */
+}
+
+.action-buttons button,
+.action-buttons a {
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: white;
+	text-decoration: none;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+	transition: background-color 0.3s ease;
+}
+
+.action-buttons button:hover,
+.action-buttons a:hover {
+	background-color: #0056b3;
+}
+
+.search-bar {
+	margin-top: 20px;
+	display: flex;
+	justify-content: center;
+}
+
+.search-form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	max-width: 100%;
+	border: 1px solid #eee;
+	border-radius: 30px;
+	padding: 5px;
+	align-items: center;
+}
+
+.theme-input,
+.theme-select {
+	flex: 1;
+	min-width: 120px;
+}
+
+@media (max-width: 768px) {
+	.search-form {
+		flex-direction: column;
+	}
+
+	.theme-input,
+	.theme-select {
+		width: 100%;
+	}
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.user-menu {
+		display: none;
+	}
+
+	.slicknav_menu .user-name {
+		display: inline-block;
+		padding: 5px;
+	}
+
+	.seat {
+		width: 35px;
+		height: 35px;
+		font-size: 12px;
+	}
+
+	.screen {
+		width: 90%;
+	}
+}
+
+/* booking-success.css */
+
+.booking-success-container {
+	margin-top: 50px;
+	padding: 20px;
+	background-color: #f8f9fa;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	text-align: center;
+}
+
+.booking-success-container h2 {
+	font-size: 24px;
+	color: #28a745;
+	/* Màu xanh lá cây */
+	margin-bottom: 20px;
+}
+
+.booking-success-container p {
+	font-size: 18px;
+	color: #555;
+	margin-bottom: 30px;
+}
+
+.booking-success-container a.theme-btn {
+	padding: 10px 20px;
+	background-color: #007bff;
+	color: white;
+	text-decoration: none;
+	border-radius: 5px;
+	transition: background-color 0.3s ease;
+}
+
+.booking-success-container a.theme-btn:hover {
+	background-color: #0056b3;
+}
+
+.booking-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+}
+
+.booking-table th,
+.booking-table td {
+	padding: 12px 15px;
+	text-align: left;
+	border-bottom: 1px solid #ddd;
+}
+
+.booking-table th {
+	background-color: #007bff;
+	color: #fff;
+	font-weight: bold;
+}
+
+.booking-table tbody tr:hover {
+	background-color: #f1f1f1;
+}
+
+.details-link {
+	color: #007bff;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.details-link:hover {
+	text-decoration: underline;
+}
+
+.no-bookings {
+	text-align: center;
+	margin-top: 20px;
+	font-size: 18px;
+	color: #6c757d;
+}
+
+.video-container {
+	display: flex;
+	gap: 16px;
+	padding: 20px;
+	border-radius: 10px;
+	justify-content: center;
+	/* Căn giữa nội dung */
+	align-items: center;
+}
+
+.main-video {
+	position: relative;
+	width: 60%;
+	/* Giảm kích thước video chính */
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.main-video .video-area {
+	position: relative;
+	width: 100%;
+}
+
+.main-video img {
+	width: 100%;
+	height: 350px;
+	/* Giảm kích thước nhưng giữ tỷ lệ */
+	object-fit: cover;
+	/* Căn giữa hình ảnh */
+	border-radius: 10px;
+}
+
+.main-video a {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 50%;
+	padding: 15px;
+}
+
+.main-video i {
+	font-size: 24px;
+	color: white;
+}
+
+.video-text {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 16px;
+	background: rgba(0, 0, 0, 0.6);
+	color: white;
+	font-size: 18px;
+}
+
+.review {
+	display: flex;
+	align-items: center;
+	margin-top: 6px;
+}
+
+.stars i {
+	color: gold;
+}
+
+/* Giảm kích thước các video phụ */
+.side-videos {
+	width: 40%;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.video-item {
+	position: relative;
+	border-radius: 10px;
+	overflow: hidden;
+	height: 187px;
+}
+
+.video-item img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	/* Căn giữa hình ảnh */
+	object-position: center;
+	border-radius: 10px;
+}
+
+.video-item a {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 50%;
+	padding: 8px;
+}
+
+.video-item i {
+	font-size: 14px;
+	color: white;
+}
+
+
+/*----------------------------------
+---------  blog details PAGE CSS END --------
+-----------------------------------*/
+
+/*--------------------------------------
+-------- Pre Loader Style START --------
+---------------------------------------*/
+#preloader {
+	position: fixed;
+	z-index: 99999999999;
+	top: 0;
+	left: 0;
+	overflow: visible;
+	width: 100%;
+	height: 100%;
+	background: #fff url("../img/loader.gif") no-repeat center center;
+}
+
+
+/*--------------------------------------
+--------- Pre Loader Style END ---------
+---------------------------------------*/

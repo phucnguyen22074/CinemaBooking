@@ -1,0 +1,229 @@
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/admin :: mainContent('brands', ~{this :: .content-wrapper})}">
+
+<head>
+	<title>brand Management</title>
+</head>
+
+<body>
+
+	<div class="content-wrapper">
+		<!-- Header -->
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-md-6">
+						<!-- Notification Box -->
+						<div id="notificationBox" th:if="${msg}"
+							th:classappend="${msgType == 'error' ? 'notification-box error' : 'notification-box success'}"
+							style="display: none;">
+							<span th:text="${msg}"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Main Content -->
+		<section class="content">
+			<div class="container-fluid">
+				<div class="card">
+					<!-- Card Header -->
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h3 class="card-title">brands Table</h3>
+						<div class="ml-auto">
+							<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addbrandModal">
+								<i class="fas fa-plus"></i> Add brand
+							</a>
+						</div>
+					</div>
+
+					<!-- Filter Form -->
+					<form th:action="@{/admin/brands/filter}" method="get" class="p-3">
+						<div class="form-row align-items-end"> <!-- Căn chỉnh các phần tử -->
+							<!-- Brand Filter -->
+							<div class="col-md-4">
+								<label><strong>Brand:</strong></label>
+								<select name="brandId" class="form-control">
+									<option value="">All brands</option>
+									<option th:each="brand : ${brands}" th:value="${brand.brandId}"
+										th:text="${brand.name}" th:selected="${brand.brandId == selectedBrandId}">
+									</option>
+								</select>
+							</div>
+							<!-- Filter Button -->
+							<div class="col-md-4">
+								<button type="submit" class="btn btn-primary w-70">
+									<i class="fa fa-filter"></i> Filter
+								</button>
+							</div>
+						</div>
+					</form>
+
+
+					<!-- Table -->
+					<div class="card-body table-responsive p-0">
+						<table class="table table-bordered table-hover">
+							<thead class="thead-dark">
+								<tr>
+									<th>ID</th>
+									<th>Name Users</th>
+									<th>Name Brands</th>
+									<th>Images</th>
+									<th class="text-center">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="brand : ${filteredBrands}">
+									<td th:text="${brand.brandId}"></td>
+									<td th:text="${brand.users.fullName}"></td>
+									<td th:text="${brand.name}"></td>
+									<td>
+										<img th:src="@{'/assets/images/brands/' + ${brand.imageUrl}}"
+											alt="Product Image" width="100" height="100" />
+									</td>
+									<td class="text-center">
+										<a href="#" class="btn btn-warning btn-sm mr-2" data-toggle="modal"
+											data-target="#editBrandModal"
+											th:attr="data-id=${brand.brandId}, data-name=${brand.name}, data-userid=${brand.users.userId}, data-image=${brand.imageUrl}"
+											onclick="openEditDialog(this)">
+											<i class="fas fa-edit"></i> Edit
+										</a>
+										<a th:href="@{'/admin/brands/delete/' + ${brand.brandId}}"
+											class="btn btn-danger btn-sm">
+											<i class="fas fa-trash"></i> Delete
+										</a>
+
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Modal Add brand -->
+		<div class="modal fade" id="addbrandModal" tabindex="-1" aria-labelledby="addbrandModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="addbrandModalLabel">Add brand</h5>
+						<button type="button" class="close" data-dismiss="modal">
+							<span>&times;</span>
+						</button>
+					</div>
+
+					<form th:action="@{/admin/brands/save}" method="post" th:object="${brand}"
+						enctype="multipart/form-data">
+						<div class="modal-body">
+							<!-- Name Field -->
+							<div class="form-group">
+								<label for="brandName">Name</label>
+								<input type="text" class="form-control" id="brandName" th:field="*{name}" required>
+							</div>
+
+							<!-- Owner Field -->
+							<div class="form-group">
+								<label for="breandOwner">Owner</label>
+								<select id="theaterBrand" class="form-control" th:field="*{users.userId}" required>
+									<option value="">Select Owner</option>
+									<option th:each="user : ${users}" th:value="${user.userId}"
+										th:text="${user.fullName}">
+									</option>
+								</select>
+							</div>
+
+							<!-- Image Upload Field -->
+							<div class="form-group">
+								<label for="brandImage">Image</label>
+								<input type="file" class="form-control-file" id="brandImage" name="file" required>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary">Save</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="editbrandModal" tabindex="-1" aria-labelledby="editbrandModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="editbrandModalLabel">Edit Brand</h5>
+						<button type="button" class="close" data-dismiss="modal">
+							<span>&times;</span>
+						</button>
+					</div>
+					<form th:action="@{/admin/brands/edit}" method="post" enctype="multipart/form-data">
+						<!-- Hidden Field for Brand ID -->
+						<input type="hidden" name="brandId" id="editBrandId" />
+
+						<div class="modal-body">
+							<!-- Brand Name Field -->
+							<div class="form-group">
+								<label for="editBrandName">Brand Name</label>
+								<input type="text" class="form-control" name="name" id="editBrandName" required />
+							</div>
+
+							<!-- Brand Owner Field -->
+							<div class="form-group">
+								<label for="editBrandOwner">Brand Owner</label>
+								<select id="editBrandOwner" name="users.userId" class="form-control">
+									<option value="">Select Owner</option>
+									<option th:each="user : ${users}" th:value="${user.userId}"
+										th:text="${user.fullName}"></option>
+								</select>
+							</div>
+
+							<!-- Image Upload Field -->
+							<div class="form-group">
+								<label for="editBrandImage">Change Image</label>
+								<input type="file" class="form-control-file" id="editBrandImage" name="file" />
+								<img id="editBrandImagePreview" src="#" alt="Brand Image" width="100" height="100"
+									style="display:none; margin-top: 10px;" />
+							</div>
+						</div>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+							<button type="submit" class="btn btn-primary">Update</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+
+</html>
+<script>
+	function openEditDialog(button) {
+		var brandId = button.getAttribute("data-id");
+		var brandName = button.getAttribute("data-name");
+		var userId = button.getAttribute("data-userid");
+		var imageUrl = button.getAttribute("data-image");
+
+		// Gán dữ liệu vào modal
+		document.getElementById("editBrandId").value = brandId;
+		document.getElementById("editBrandName").value = brandName;
+		document.getElementById("editBrandOwner").value = userId;
+
+		// Hiển thị hình ảnh cũ (nếu có)
+		var imgPreview = document.getElementById("editBrandImagePreview");
+		if (imageUrl) {
+			imgPreview.src = "/assets/images/brands/" + imageUrl;
+			imgPreview.style.display = "block";
+		} else {
+			imgPreview.style.display = "none";
+		}
+
+		// Mở modal
+		$("#editbrandModal").modal("show");
+	}
+</script>

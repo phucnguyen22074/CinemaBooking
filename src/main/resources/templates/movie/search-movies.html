@@ -1,0 +1,131 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/user :: mainContent('Movie Details',~{this :: .span9})}">
+<head>
+    <title></title>
+</head>
+<body>
+    <div class="span9">
+        <!-- breadcrumb area start -->
+        <section class="breadcrumb-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="breadcrumb-area-content">
+                            <h1>Movies Page</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- breadcrumb area end -->
+
+        <!-- Now Showing Movies -->
+        <section class="portfolio-area pt-60">
+            <div class="container">
+                <div class="row flexbox-center">
+                    <div class="col-lg-6 text-lg-left">
+                        <div class="section-title">
+                            <h1><i class="icofont icofont-movie"></i> Good Movies Now Showing</h1>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row portfolio-item">
+                            <div th:each="movie : ${movies}" th:if="${movie.status == true}" class="col-md-3 col-sm-6">
+                                <div class="single-portfolio">
+                                    <div class="single-portfolio-img">
+                                        <img th:src="@{'/assets/images/' + ${movie.imageUrl}}" alt="portfolio" />
+                                        <!-- Rating displayed in the image -->
+                                        <div class="rating-overlay">
+                                            <span
+                                                th:each="i : ${movie.rating != null ? #numbers.sequence(1, movie.rating) : #numbers.sequence(1, 0)}">
+                                                <i class="icofont icofont-star"></i>
+                                            </span>
+                                        </div>
+                                        <a th:href="@{'https://www.youtube.com/watch?v=' + ${movie.trailerUrl}}"
+                                            class="popup-youtube">
+                                            <i class="icofont icofont-ui-play"></i>
+                                        </a>
+                                    </div>
+                                    <div class="portfolio-content">
+                                        <a th:href="@{'/movie/details/' + ${movie.movieId}}" th:text="${movie.title}"
+                                            class="movie-title"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- Now Showing Movies end -->
+
+        <!-- Upcoming Movies -->
+        <section class="portfolio-area pt-60">
+            <div class="container">
+                <div class="row flexbox-center">
+                    <div class="col-lg-6 text-lg-left">
+                        <div class="section-title">
+                            <h1><i class="icofont icofont-movie"></i> Upcoming Movies</h1>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row portfolio-item">
+                            <div th:each="movie : ${movies}" th:if="${movie.status == false}" class="col-md-3 col-sm-6">
+                                <div class="single-portfolio">
+                                    <div class="single-portfolio-img">
+                                        <img th:src="@{'/assets/images/' + ${movie.imageUrl}}" alt="portfolio" />
+                                        <!-- Rating displayed in the image -->
+                                        <div class="rating-overlay">
+                                            <span
+                                                th:each="i : ${movie.rating != null ? #numbers.sequence(1, movie.rating) : #numbers.sequence(1, 0)}">
+                                                <i class="icofont icofont-star"></i>
+                                            </span>
+                                        </div>
+                                        <a th:href="@{'https://www.youtube.com/watch?v=' + ${movie.trailerUrl}}"
+                                            class="popup-youtube">
+                                            <i class="icofont icofont-ui-play"></i>
+                                        </a>
+                                    </div>
+                                    <div class="portfolio-content">
+                                        <a th:href="@{'/movie/details/' + ${movie.movieId}}" th:text="${movie.title}"
+                                            class="movie-title"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- Upcoming Movies end -->
+
+        <!-- video section start -->
+        <section class="video ptb-90">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-title pb-20">
+                            <h1><i class="icofont icofont-film"></i> Trailers & Videos</h1>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="video-slider mt-20">
+                            <div class="video-area" th:each="trailer : ${movieTrailers}">
+                                <img th:src="@{'/assets/images/' + ${trailer.imageUrl}}" alt="video" />
+                                <a th:href="@{'https://www.youtube.com/watch?v=' + ${trailer.trailerUrl}}" class="popup-youtube">
+                                    <i class="icofont icofont-ui-play"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- video section end -->
+    </div>
+</body>
+</html>
